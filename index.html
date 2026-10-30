@@ -846,6 +846,41 @@
       }
     }
 
+    /*
+      ============================================================
+      回転ボタンのSVGアイコン
+      ============================================================
+
+      SVGの大きさと線の太さを指定します。
+
+      stroke-width
+        → 線の太さです。数値を大きくすると太くなります。
+
+      stroke-linecap
+        → 線の端を丸くします。
+
+      stroke-linejoin
+        → 線が曲がる部分を丸くします。
+
+      currentColor
+        → ボタンの文字色と同じ色を使用します。
+    */
+    .touch-btn svg {
+      width: 30px;
+      height: 30px;
+
+      fill: none;
+      stroke: currentColor;
+
+      stroke-width: 3.2;
+
+      stroke-linecap: round;
+      stroke-linejoin: round;
+
+      flex-shrink: 0;
+    }
+
+
   </style>
 </head>
 
@@ -944,12 +979,12 @@
         <div id="overlay" class="overlay">
 
           <h2 id="overlay-title">
-            準備はいい？
+            ready?
           </h2>
 
           <p id="overlay-text">
-            白い斜線の目標ブロックを、<br>
-            すべて消してクリアを目指そう。
+            白い斜線のブロックを<br>
+            消してクリア
           </p>
 
           <button class="primary" id="start-btn">
@@ -1088,7 +1123,7 @@
           ボタン自体の動作は変更していません。
           現在はどちらも未使用です。
         -->
-        <div class="utility-controls">
+        <div class="utility-controls" hidden>
 
           <!-- 設定ボタン -->
           <button
@@ -1170,13 +1205,13 @@
 
       左から順番に、
 
-        1. 設定
-        2. 左回転
-        3. 左移動
-        4. 下移動
-        5. 右移動
-        6. 右回転
-        7. 予備
+        
+        1. 左回転
+        2. 左移動
+        3. 下移動
+        4. 右移動
+        5. 右回転
+        
 
       という並びになっています。
 
@@ -1209,7 +1244,16 @@
         data-action="rotate-left"
         aria-label="左回転">
 
-        <span aria-hidden="true">↶</span>
+        <!-- 左回転：反時計回りの矢印 -->
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true">
+
+          <path d="M3 3v6h6" />
+
+          <path d="M3.05 13A9 9 0 1 0 5.64 5.64L3 9" />
+
+        </svg>
 
       </button>
 
@@ -1283,7 +1327,16 @@
         data-action="rotate-right"
         aria-label="右回転">
 
-        <span aria-hidden="true">↻</span>
+        <!-- 右回転：時計回りの矢印 -->
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true">
+
+          <path d="M21 3v6h-6" />
+
+          <path d="M20.95 13A9 9 0 1 1 18.36 5.64L21 9" />
+
+        </svg>
 
       </button>
 
