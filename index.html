@@ -28,7 +28,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- ブラウザのタブなどに表示されるページ名 -->
-  <title>テトリス — Mini Blocks</title>
+  <title>消しリス</title>
 
 
   <!--
@@ -811,21 +811,7 @@
       タイトル部分
       ==========================================================
     -->
-    <header>
 
-      <div>
-        <h1>MINI BLOCKS</h1>
-
-        <div class="subtitle">
-          シンプルに遊べる、ブラウザ・テトリス
-        </div>
-      </div>
-
-      <div class="tip">
-        ブラウザだけで動作します。インストール不要。
-      </div>
-
-    </header>
 
 
 
@@ -928,7 +914,7 @@
 
 
         <!-- スコア表示 -->
-        <div class="card">
+        <div class="card" hidden>
 
           <div class="label">
             スコア
@@ -947,7 +933,7 @@
 
 
         <!-- 消したライン数の表示 -->
-        <div class="card">
+        <div class="card" hidden>
 
           <div class="label">
             消したライン
@@ -962,7 +948,7 @@
 
 
         <!-- 現在のレベルの表示 -->
-        <div class="card">
+        <div class="card" hidden>
 
           <div class="label">
             レベル
@@ -1005,52 +991,6 @@
 
         <!--
           ------------------------------------------------------
-          ブロックの見分け方
-          ------------------------------------------------------
-
-          このゲームでは、最初から配置されている目標ブロックと、
-          プレイヤーが後から配置したブロックを区別しています。
-
-          その違いをプレイヤーに伝えるための説明です。
-        -->
-        <div class="card legend">
-
-          <div class="label">
-            ブロックの見分け方
-          </div>
-
-          <div class="legend-row">
-
-            <span
-              class="swatch swatch-target"
-              aria-hidden="true">
-            </span>
-
-            <span>
-              目標ブロック
-            </span>
-
-          </div>
-
-          <div class="legend-row">
-
-            <span
-              class="swatch swatch-player"
-              aria-hidden="true">
-            </span>
-
-            <span>
-              自分のブロック
-            </span>
-
-          </div>
-
-        </div>
-
-
-
-        <!--
-          ------------------------------------------------------
           一時停止・やり直し
           ------------------------------------------------------
 
@@ -1086,7 +1026,7 @@
           スマートフォン向けボタンを追加した後も、
           PCではこれまでどおりキーボード操作を利用できます。
         -->
-        <div class="card help">
+        <div class="card help" hidden>
 
           <div class="label">
             操作方法
