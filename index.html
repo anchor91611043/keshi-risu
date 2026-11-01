@@ -230,9 +230,9 @@
         220px;
 
       gap: 18px;
-      align-items: start;
+      /* 左右の領域の高さを揃える */
+      align-items: stretch;
     }
-
 
     /*
       ------------------------------------------------------------
@@ -881,6 +881,1138 @@
     }
 
 
+    /*
+      ============================================================
+      設定画面の背景
+      ============================================================
+
+      position: fixed
+        → ブラウザ画面全体を基準に配置します。
+          ゲーム画面のレイアウトには影響しません。
+
+      inset: 0
+        → 上下左右すべてを画面の端に合わせます。
+
+      z-index: 100
+        → ゲーム画面より手前に表示します。
+
+      背景を半透明の黒にすることで、
+      ゲーム画面の上に設定画面が重なっていることを表現します。
+    */
+    .settings-screen {
+      position: fixed;
+      inset: 0;
+
+      z-index: 100;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 18px;
+
+      background: rgba(3, 7, 18, 0.82);
+
+      /*
+        設定画面の内容が画面からはみ出した場合に、
+        背景側でスクロールできるようにします。
+      */
+      overflow-y: auto;
+    }
+
+
+    /*
+      ============================================================
+      設定画面の非表示処理
+      ============================================================
+
+      HTMLのhidden属性が付いている場合は、
+      必ず非表示にします。
+
+      .settings-screenにdisplay:flexを指定しているため、
+      hidden属性だけでは非表示にならない場合があります。
+
+      そのため、ここで明示的にdisplay:noneを指定します。
+    */
+    .settings-screen[hidden] {
+      display: none;
+    }
+
+
+    /*
+      ============================================================
+      設定パネル本体
+      ============================================================
+
+      実際に設定項目を表示する箱です。
+
+      max-width
+        → 横幅が広くなりすぎないようにします。
+
+      width:100%
+        → スマートフォンでは画面幅に合わせます。
+
+      border-radius
+        → パネルの角を丸くします。
+    */
+    .settings-card {
+      width: min(420px, 100%);
+
+      padding: 24px;
+
+      background: #151d32;
+
+      border: 1px solid #45577e;
+      border-radius: 16px;
+
+      box-shadow: 0 20px 60px #0009;
+    }
+
+
+    /*
+      ============================================================
+      設定画面のタイトル部分
+      ============================================================
+    */
+    .settings-heading {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .settings-heading h2 {
+      margin: 0;
+
+      font-size: 26px;
+      letter-spacing: .08em;
+    }
+
+
+    /*
+      ============================================================
+      設定項目の配置
+      ============================================================
+
+      設定ボタンを縦方向に並べます。
+
+      gapで各ボタンの間隔を管理します。
+    */
+    .settings-options {
+      display: flex;
+      flex-direction: column;
+
+      gap: 12px;
+    }
+
+
+    /*
+      ============================================================
+      設定項目のボタン
+      ============================================================
+
+      ホールドやクイックドロップのON/OFF、
+      ボタン配置画面への移動などに使用します。
+
+      今後、設定項目が増えた場合も、
+      このclassを付ければ同じ見た目になります。
+    */
+    .settings-btn {
+      width: 100%;
+      min-height: 54px;
+
+      padding: 12px 16px;
+
+      text-align: left;
+
+      background: #202d49;
+      border: 1px solid #405476;
+
+      border-radius: 10px;
+
+      font-size: 15px;
+    }
+
+
+    /*
+      設定ボタンにマウスカーソルを重ねたときの表示
+    */
+    .settings-btn:hover {
+      background: #2b3c60;
+    }
+
+
+    /*
+      ============================================================
+      設定画面を閉じるボタン
+      ============================================================
+
+      設定項目とは少し違う見た目にして、
+      「戻る」操作であることを分かりやすくします。
+    */
+    .settings-close-btn {
+      width: 100%;
+
+      min-height: 48px;
+
+      margin-top: 22px;
+
+      background: #38445e;
+      border-color: #596985;
+    }
+
+
+    /*
+      戻るボタンにマウスカーソルを重ねたとき
+    */
+    .settings-close-btn:hover {
+      background: #465571;
+    }
+
+
+    /*
+      ============================================================
+      スマートフォン向けの設定画面
+      ============================================================
+
+      画面幅が650px以下の場合、
+      パネルの余白などを少し調整します。
+    */
+    @media(max-width:650px) {
+
+      .settings-card {
+        padding: 20px;
+      }
+
+      .settings-heading {
+        margin-bottom: 20px;
+      }
+
+      .settings-heading h2 {
+        font-size: 23px;
+      }
+
+      .settings-btn {
+        min-height: 52px;
+      }
+
+    }
+
+    /*
+      ============================================================
+      ボタン配置編集領域の全体設定
+      ============================================================
+
+      全体を横8マス×縦6マスとして管理します。
+
+      aspect-ratio: 8 / 6
+        → 全体の縦横比を8対6に固定します。
+
+      これにより、横8列・縦6行のマスが
+      すべて正方形になるようにします。
+
+      grid-template-columns
+        → 横方向を8等分します。
+
+      grid-template-rows
+        → 縦方向を6等分します。
+
+      2つの配置領域は、この大きなマス目の中に配置します。
+    */
+    .layout-editor-area {
+      width: 100%;
+      max-width: 400px;
+
+      aspect-ratio: 8 / 6;
+
+      margin: 18px auto;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(8, minmax(0, 1fr));
+
+      grid-template-rows:
+        repeat(6, minmax(0, 1fr));
+
+      background: #0b1020;
+
+    }
+
+
+    /*
+      ============================================================
+      下部の配置領域
+      ============================================================
+
+      横6マス×縦2マスです。
+
+      grid-column: 1 / 7
+        → 左から6列分を使用します。
+
+      grid-row: 5 / 7
+        → 下側の2行分を使用します。
+
+      内部も6列×2行のGridとして構成します。
+    */
+    .layout-grid-bottom {
+      grid-column: 1 / 7;
+      grid-row: 5 / 7;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+      grid-template-rows:
+        repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    /*
+      ============================================================
+      右側の配置領域
+      ============================================================
+
+      横2マス×縦6マスです。
+
+      grid-column: 7 / 9
+        → 右端の2列分を使用します。
+
+      grid-row: 1 / 7
+        → 6行すべてを使用します。
+
+      内部も2列×6行のGridとして構成します。
+
+      下部の配置領域と同じマスの大きさになります。
+    */
+    .layout-grid-right {
+      grid-column: 7 / 9;
+      grid-row: 1 / 7;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      grid-template-rows:
+        repeat(6, minmax(0, 1fr));
+
+    }
+
+
+    /*
+      ============================================================
+      各マスの見た目
+      ============================================================
+
+      下部・右側のどちらも同じclassを使用します。
+
+      そのため、マスの大きさだけでなく、
+      色や枠線も統一できます。
+
+      将来的には、このマスの中に
+      操作ボタンを配置することになります。
+    */
+    .layout-grid-cell {
+      min-width: 0;
+      min-height: 0;
+
+      background: #192642;
+
+      border: 1px solid #526687;
+
+      transition: background .15s;
+    }
+
+
+    /*
+      マスにマウスカーソルを重ねた場合の表示
+
+      将来の配置編集時に、
+      どのマスを操作しているか分かりやすくするためのものです。
+    */
+    .layout-grid-cell:hover {
+      background: #2a4168;
+    }
+
+
+    /*
+      ============================================================
+      配置編集画面のボタン共通設定
+      ============================================================
+
+      実際のゲーム画面にある操作ボタンとは別に、
+      配置編集画面専用のボタンとして設定します。
+
+      width・heightを100%にすることで、
+      CSS Gridによって割り当てられたマス目いっぱいに表示します。
+
+      min-width・min-heightを0にしているのは、
+      ボタンの文字や内容によってマス目が押し広げられるのを
+      防ぐためです。
+    */
+    .layout-preview-btn {
+      width: 100%;
+      height: 100%;
+
+      min-width: 0;
+      min-height: 0;
+
+      padding: 2px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border: 1px solid #7085a8;
+      border-radius: 8px;
+
+      background: #263858;
+      color: #edf2ff;
+
+      font-size: clamp(12px, 3vw, 22px);
+      font-weight: 750;
+
+      /*
+        配置編集画面で文字選択などが起きないようにします。
+        将来のドラッグ操作にも備えています。
+      */
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+
+      touch-action: none;
+    }
+
+
+    /*
+      ============================================================
+      下部の操作ボタン
+      ============================================================
+
+      各ボタンを横2マス×縦1マスにします。
+
+      1段に3個、2段で合計6個のボタンが配置されます。
+
+      HTMLに記述した順番に自動的に並ぶため、
+      現在の並び順を変更する必要はありません。
+    */
+    .layout-grid-bottom .layout-preview-btn {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+
+
+    /*
+      ============================================================
+      右側のホールドボタン
+      ============================================================
+
+      横2マス×縦2マスを使用します。
+
+      右側の配置領域は横2マスなので、
+      横幅いっぱいに表示されます。
+    */
+    .layout-grid-right .layout-preview-hold {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+
+    /*
+      ============================================================
+      グリッド内のボタン間隔
+      ============================================================
+
+      gapを設定することで、ボタン同士が密着しないようにします。
+
+      下部・右側の両方で同じ間隔を使用します。
+    */
+    .layout-grid-bottom,
+    .layout-grid-right {
+      gap: 4px;
+    }
+
+
+    /*
+      ============================================================
+      配置編集画面のボタンを押したときの表示
+      ============================================================
+    */
+    .layout-preview-btn:active {
+      background: #465f8b;
+      border-color: #a9bbda;
+    }
+
+    /*
+      ============================================================
+      ボタン配置編集中のカーソル
+      ============================================================
+
+      grab
+        → つかめることを表すカーソル
+
+      grabbing
+        → 現在つかんでいることを表すカーソル
+
+      PCでマウス操作するときに、ドラッグ可能であることを
+      分かりやすくします。
+    */
+    .layout-preview-btn {
+      cursor: grab;
+
+      touch-action: none;
+    }
+
+
+    /*
+      ============================================================
+      ドラッグ中のボタン
+      ============================================================
+
+      is-draggingクラスは、
+      ボタンを押してドラッグしている間だけ付きます。
+
+      opacity
+        → 少し透明にして、移動中であることを表現します。
+
+      z-index
+        → 他のボタンより手前に表示します。
+
+      cursor:grabbing
+        → つかんでいる状態のカーソルに変更します。
+    */
+    .layout-preview-btn.is-dragging {
+      opacity: 0.75;
+
+      z-index: 10;
+
+      cursor: grabbing;
+
+      border-color: #ffffff;
+      background: #465f8b;
+    }
+
+    /*
+      ============================================================
+      配置保存結果の表示
+      ============================================================
+
+      保存に成功したかどうかを表示する文章です。
+
+      文字を中央に配置し、
+      保存結果が分かりやすいようにします。
+    */
+    .layout-save-status {
+      min-height: 20px;
+
+      margin: 10px 0 0;
+
+      text-align: center;
+
+      color: #9ca9c7;
+
+      font-size: 13px;
+    }
+
+    /*
+      ============================================================
+      操作ボタンの非表示設定
+      ============================================================
+
+      .touch-btnにはdisplay:flexが指定されています。
+
+      そのため、HTMLのhidden属性だけでは
+      非表示にならない場合があります。
+
+      [hidden]を明示することで、
+      hidden属性が付いた操作ボタンを確実に非表示にします。
+
+      現在の対象：
+        ・ホールドボタン
+        ・クイックドロップボタン
+
+      将来的に設定画面から表示・非表示を切り替える際にも使用します。
+    */
+    .touch-btn[hidden] {
+      display: none !important;
+    }
+
+    /*
+      ============================================================
+      盤面と操作ボタンの縦方向のグループ
+      ============================================================
+
+      盤面のすぐ下に操作ボタンを配置するための領域です。
+
+      flex-direction:column
+        → 盤面と操作ボタンを縦に並べます。
+
+      gap
+        → 盤面と操作ボタンの間隔です。
+          数値を変更すると距離を調整できます。
+    */
+    .board-column {
+      min-width: 0;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 8px;
+    }
+
+
+    /*
+      盤面と一緒に移動したため、
+      上側の余白は不要になります。
+    */
+    .game-controls-section {
+      margin-top: 0;
+    }
+
+    /*
+      ============================================================
+      盤面と下部操作領域の配置
+      ============================================================
+
+      board-column
+        → 盤面と下部操作領域を縦にまとめます。
+
+      この2つを同じ親要素にすることで、
+      操作ボタンが盤面のすぐ下に配置されます。
+    */
+    .board-column {
+      min-width: 0;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 8px;
+    }
+
+
+    /*
+      ============================================================
+      左側：下部操作領域
+      ============================================================
+
+      横6マス×縦2マスのグリッドです。
+
+      aspect-ratio: 3 / 1
+
+        → 横6マス×縦2マスなので、
+          全体の縦横比を3対1にします。
+
+        → これによって各マスが正方形になります。
+
+      grid-template-columns
+        → 横方向を6等分します。
+
+      grid-template-rows
+        → 縦方向を2等分します。
+    */
+    .game-controls-section {
+      width: 100%;
+      margin: 0;
+    }
+
+    /*
+      ============================================================
+      左側：下部操作領域
+      ============================================================
+
+      横6マス×縦2マスのグリッドです。
+
+      width: 100%
+        → 盤面の横幅いっぱいに広げます。
+
+      aspect-ratio: 3.5 / 1
+        → 横幅に対して縦幅を少し小さくします。
+
+      grid-template-columns
+        → 横方向を6等分します。
+
+      grid-template-rows
+        → 縦方向を2等分します。
+
+      今回は正方形にする必要がないため、
+      縦横比を自由に調整できます。
+    */
+    .game-bottom-area {
+      width: 100%;
+
+      aspect-ratio: 5 / 1;
+
+      margin: 0;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+      grid-template-rows:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 4px;
+    }
+
+
+    /*
+      ============================================================
+      右側：操作領域
+      ============================================================
+
+      横2マス×縦6マスのグリッドです。
+
+      aspect-ratio: 1 / 3
+
+        → 全体の縦横比を1対3にします。
+
+        → これによって各マスが正方形になります。
+
+      PCでは右側の情報欄の幅いっぱいを使用します。
+
+      スマートフォンでは後述の設定で幅を半分にし、
+      左側の1マスと同じ大きさに調整します。
+    */
+    .game-right-area {
+      width: 100%;
+
+      aspect-ratio: 1 / 2;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      grid-template-rows:
+        repeat(6, minmax(0, 1fr));
+
+      gap: 4px;
+
+      /*
+        右側の情報欄の左端に合わせます。
+      */
+      margin: 0 auto 0 0;
+    }
+
+
+    /*
+      ============================================================
+      ゲーム画面の操作ボタン共通設定
+      ============================================================
+
+      ボタンを、それぞれ割り当てられたマスいっぱいに表示します。
+
+      width・height:100%
+        → Gridのマス目に合わせます。
+
+      min-width・min-height:0
+        → ボタン自身の最低サイズによって、
+          グリッドが崩れるのを防ぎます。
+    */
+    .game-bottom-area .touch-btn,
+    .game-right-area .touch-btn {
+      width: 100%;
+      height: 100%;
+
+      min-width: 0;
+      min-height: 0;
+
+      padding: 2px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 8px;
+
+      font-size: clamp(15px, 4vw, 25px);
+
+      touch-action: none;
+
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+
+    /*
+      ============================================================
+      左右回転アイコン
+      ============================================================
+
+      これまで設定した太いSVGのデザインを維持します。
+    */
+    .game-bottom-area .touch-btn svg,
+    .game-right-area .touch-btn svg {
+      width: 30px;
+      height: 30px;
+
+      fill: none;
+      stroke: currentColor;
+
+      stroke-width: 3.2;
+
+      stroke-linecap: round;
+      stroke-linejoin: round;
+
+      flex-shrink: 0;
+    }
+
+
+    /*
+      ============================================================
+      非表示ボタン
+      ============================================================
+
+      hidden属性が付いたボタンを確実に非表示にします。
+    */
+    .game-bottom-area .touch-btn[hidden],
+    .game-right-area .touch-btn[hidden] {
+      display: none !important;
+    }
+
+
+    /*
+      ============================================================
+      右側のホールド画面
+      ============================================================
+
+      ホールド画面は右側の情報欄の幅に合わせます。
+
+      初期状態ではhidden属性によって非表示です。
+    */
+    .side #hold-preview-card {
+      width: 100%;
+    }
+
+
+    /*
+      ============================================================
+      スマートフォン向け調整
+      ============================================================
+
+      現在のスマートフォン用レイアウトでは、
+      右側の情報欄が130pxになっています。
+
+      左側の盤面幅に対して、
+      右側の幅が少し広いため、操作領域だけ半分にします。
+
+      これによって、
+
+        左側：横6マス
+        右側：横2マス
+
+      の各マスの大きさを揃えます。
+
+      margin-right:auto
+        → 操作領域を右側の情報欄の左端に寄せます。
+    */
+    @media(max-width:650px) {
+
+      .board-column {
+        gap: 6px;
+      }
+
+      .game-bottom-area {
+        gap: 3px;
+      }
+
+      .game-right-area {
+        width: 50%;
+        gap: 3px;
+      }
+
+      /*
+        ホールド画面も右側の操作領域と幅を揃えます。
+      */
+      .side #hold-preview-card {
+        width: 50%;
+        margin-right: auto;
+      }
+
+      .game-bottom-area .touch-btn,
+      .game-right-area .touch-btn {
+        border-radius: 7px;
+      }
+
+    }
+
+    /*
+      ============================================================
+      右側操作領域を一番下に配置
+      ============================================================
+
+      .sideは縦方向に要素を並べるFlexboxです。
+
+      margin-top:auto を指定すると、
+      上側に余っている空間を自動的に吸収します。
+
+      その結果、右側の操作領域が
+      情報欄の一番下に配置されます。
+    */
+    .side .game-right-area {
+      margin-top: auto;
+    }
+
+    /*
+      ============================================================
+      ボタン配置設定画面の拡張
+      ============================================================
+
+      通常の設定画面より広い横幅を使用します。
+
+      左側：ボタン配置エリア
+      右側：ボタン仮置き場
+    */
+    .settings-card.layout-card {
+      width: min(900px, 100%);
+    }
+
+
+    /*
+      ============================================================
+      配置エリアと仮置き場の横並び
+      ============================================================
+    */
+    .layout-workspace {
+      width: 100%;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 24px;
+
+      align-items: start;
+    }
+
+
+    /*
+      各エリアの共通設定
+    */
+    .layout-workspace-panel {
+      min-width: 0;
+      width: 100%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+
+    /*
+      ============================================================
+      各エリアのタイトル
+      ============================================================
+    */
+    .layout-workspace-title {
+      width: 100%;
+
+      margin: 0 0 8px;
+
+      text-align: center;
+
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+
+    /*
+      ============================================================
+      配置エリアの色分け
+      ============================================================
+
+      下側エリア：青系
+      右側エリア：緑系
+
+      HTMLの既存マス目の配置情報を利用して
+      自動的に色を分けます。
+    */
+
+    /* 右側エリア：7列目・8列目 */
+    .layout-editor-area > .layout-grid-cell[style*="grid-column:7;"],
+    .layout-editor-area > .layout-grid-cell[style*="grid-column:8;"] {
+      background: #294334;
+      border-color: #668d75;
+    }
+
+
+    /* 下側エリア：5行目・6行目のうち、左側6マス */
+    .layout-editor-area > .layout-grid-cell[style*="grid-row:5;"]:not([style*="grid-column:7;"]):not([style*="grid-column:8;"]),
+    .layout-editor-area > .layout-grid-cell[style*="grid-row:6;"]:not([style*="grid-column:7;"]):not([style*="grid-column:8;"]) {
+      background: #243b58;
+      border-color: #6486b2;
+    }
+
+
+    /*
+      ============================================================
+      色分けの説明
+      ============================================================
+    */
+    .layout-zone-legend {
+      width: 100%;
+
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      gap: 8px;
+
+      margin-bottom: 4px;
+    }
+
+    .layout-zone-label {
+      padding: 5px 9px;
+
+      border: 1px solid;
+      border-radius: 6px;
+
+      font-size: 12px;
+    }
+
+    .layout-zone-bottom {
+      background: #243b58;
+      border-color: #6486b2;
+    }
+
+    .layout-zone-right {
+      background: #294334;
+      border-color: #668d75;
+    }
+
+
+    /*
+      ============================================================
+      配置エリアの注意書き
+      ============================================================
+    */
+    .layout-area-note {
+      width: 100%;
+
+      margin: 8px 0 0;
+
+      text-align: center;
+
+      color: #f0c979;
+
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+
+    /*
+      ============================================================
+      仮置き場
+      ============================================================
+
+      横8列×縦6行です。
+
+      既存の配置エリアと同じ縦横比にします。
+
+      背景画像の2本の線でマス目を表現します。
+      JavaScriptからボタンを配置できるように
+      CSS Gridも用意しています。
+    */
+    .layout-staging-area {
+      width: 100%;
+      max-width: 400px;
+
+      aspect-ratio: 8 / 6;
+
+      margin: 18px auto;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(8, minmax(0, 1fr));
+
+      grid-template-rows:
+        repeat(6, minmax(0, 1fr));
+
+      background-color: #202b3c;
+
+      background-image:
+        linear-gradient(
+          to right,
+          #526687 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          #526687 1px,
+          transparent 1px
+        );
+
+      background-size:
+        12.5% 100%,
+        100% 16.6667%;
+
+      border: 1px solid #526687;
+    }
+
+
+    /*
+      仮置き場の説明
+    */
+    .layout-staging-description {
+      margin: 0;
+
+      text-align: center;
+
+      color: #9ca9c7;
+
+      font-size: 12px;
+    }
+
+
+    /*
+      ============================================================
+      大きさ変更ボタンの準備中表示
+      ============================================================
+    */
+    #layout-size-mode-btn {
+      margin-top: 12px;
+    }
+
+    #layout-size-mode-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+
+    /*
+      ============================================================
+      スマートフォン向け表示
+      ============================================================
+
+      横幅が狭い場合は、
+      配置エリアと仮置き場を上下に並べます。
+    */
+    @media (max-width: 760px) {
+
+      .settings-card.layout-card {
+        width: min(500px, 100%);
+      }
+
+      .layout-workspace {
+        grid-template-columns: 1fr;
+
+        gap: 28px;
+      }
+
+      .layout-workspace-panel {
+        width: 100%;
+      }
+
+    }
+
+
+
   </style>
 </head>
 
@@ -918,6 +2050,16 @@
       左側に盤面、右側に情報欄を表示します。
     -->
     <div class="layout">
+      <!--
+        盤面と操作ボタンを縦にまとめる領域です。
+
+        この中に盤面と操作領域を入れることで、
+        右側の情報欄とは独立して配置できるようにします。
+      -->
+      <div class="board-column">
+
+
+
 
 
       <!--
@@ -995,6 +2137,172 @@
 
       </section>
 
+      <!--
+      ============================================================
+      左側：下部操作領域
+      ============================================================
+
+      盤面の直下に配置する操作ボタンの領域です。
+
+      横6マス×縦2マスで構成します。
+
+      配置編集モードでは共通の8列×6行で管理していますが、
+      実際の画面では左側の6列×2行として表示します。
+
+      data-layout-col・rowは、配置編集モードと共通の座標です。
+
+      一方、styleのgrid-column・grid-rowは、
+      この左側の領域内だけで使用する表示位置です。
+    -->
+    <div class="game-controls-section">
+
+      <div
+        id="game-bottom-area"
+        class="game-bottom-area"
+        role="group"
+        aria-label="下部ゲーム操作">
+
+
+        <!--
+          左回転
+          共通座標：1列目・5行目
+          左側領域内：1列目・1行目
+          大きさ：横2マス×縦1マス
+        -->
+        <button
+          type="button"
+          class="touch-btn"
+          data-action="rotate-left"
+          data-layout-col="1"
+          data-layout-row="5"
+          data-layout-width="2"
+          data-layout-height="1"
+          style="grid-column:1 / span 2; grid-row:1 / span 1;"
+          aria-label="左回転">
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 3v6h6" />
+            <path d="M3.05 13A9 9 0 1 0 5.64 5.64L3 9" />
+          </svg>
+
+        </button>
+
+
+        <!--
+          クイックドロップ
+          共通座標：3列目・5行目
+          左側領域内：3列目・1行目
+
+          初期状態では非表示です。
+        -->
+        <button
+          type="button"
+          id="quick-drop-btn"
+          class="touch-btn"
+          data-action="quick-drop"
+          data-layout-col="3"
+          data-layout-row="5"
+          data-layout-width="2"
+          data-layout-height="1"
+          style="grid-column:3 / span 2; grid-row:1 / span 1;"
+          aria-label="クイックドロップ"
+          hidden>
+
+          DROP
+
+        </button>
+
+
+        <!--
+          右回転
+          共通座標：5列目・5行目
+          左側領域内：5列目・1行目
+        -->
+        <button
+          type="button"
+          class="touch-btn"
+          data-action="rotate-right"
+          data-layout-col="5"
+          data-layout-row="5"
+          data-layout-width="2"
+          data-layout-height="1"
+          style="grid-column:5 / span 2; grid-row:1 / span 1;"
+          aria-label="右回転">
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 3v6h-6" />
+            <path d="M20.95 13A9 9 0 1 1 18.36 5.64L21 9" />
+          </svg>
+
+        </button>
+
+
+        <!--
+          左移動
+          共通座標：1列目・6行目
+          左側領域内：1列目・2行目
+        -->
+        <button
+          type="button"
+          class="touch-btn"
+          data-action="left"
+          data-layout-col="1"
+          data-layout-row="6"
+          data-layout-width="2"
+          data-layout-height="1"
+          style="grid-column:1 / span 2; grid-row:2 / span 1;"
+          aria-label="左へ移動">
+
+          <span aria-hidden="true">←</span>
+
+        </button>
+
+
+        <!--
+          下移動
+          共通座標：3列目・6行目
+          左側領域内：3列目・2行目
+        -->
+        <button
+          type="button"
+          class="touch-btn"
+          data-action="down"
+          data-layout-col="3"
+          data-layout-row="6"
+          data-layout-width="2"
+          data-layout-height="1"
+          style="grid-column:3 / span 2; grid-row:2 / span 1;"
+          aria-label="下へ移動">
+
+          <span aria-hidden="true">↓</span>
+
+        </button>
+
+
+        <!--
+          右移動
+          共通座標：5列目・6行目
+          左側領域内：5列目・2行目
+        -->
+        <button
+          type="button"
+          class="touch-btn"
+          data-action="right"
+          data-layout-col="5"
+          data-layout-row="6"
+          data-layout-width="2"
+          data-layout-height="1"
+          style="grid-column:5 / span 2; grid-row:2 / span 1;"
+          aria-label="右へ移動">
+
+          <span aria-hidden="true">→</span>
+
+        </button>
+
+      </div>
+
+    </div>
+    </div> <!-- board-columnの終了 -->
 
 
       <!--
@@ -1111,44 +2419,124 @@
 
         <!--
           ============================================================
-          設定・予備ボタン
+          設定・タイトルへボタン
           ============================================================
 
-          画面下部にあった設定ボタンと予備ボタンを、
+          画面下部にあった設定ボタンとタイトルへボタンを、
           右側の情報欄へ移動しました。
 
           utility-controls
             → 2つのボタンをまとめるための領域です。
 
           ボタン自体の動作は変更していません。
-          現在はどちらも未使用です。
         -->
-        <div class="utility-controls" hidden>
+        <div class="utility-controls">
 
           <!-- 設定ボタン -->
           <button
             type="button"
             class="touch-btn utility"
             data-action="settings"
-            aria-label="設定（現在は未使用）">
+            aria-label="設定">
 
             <span aria-hidden="true">⚙</span>
 
           </button>
 
 
-          <!-- 予備ボタン -->
+          <!-- タイトルへボタン -->
           <button
             type="button"
             class="touch-btn utility"
-            data-action="spare"
-            aria-label="予備ボタン（現在は未使用）">
+            data-action="title"
+            aria-label="タイトルへ">
 
-            <span aria-hidden="true"></span>
+            <span aria-hidden="true"> 🏠</span>
 
           </button>
 
         </div>
+
+        <!--
+          ============================================================
+          右側：ホールド画面
+          ============================================================
+
+          配置編集モードの右側操作領域の上に表示する予定です。
+
+          初期状態では非表示にします。
+        -->
+        <div
+          id="hold-preview-card"
+          class="card next-card"
+          hidden>
+
+          <div class="label">
+            HOLD
+          </div>
+
+          <canvas
+            id="hold-preview"
+            class="mini"
+            width="160"
+            height="120">
+          </canvas>
+
+        </div>
+
+
+        <!--
+          ============================================================
+          右側：操作ボタン領域
+          ============================================================
+
+          横2マス×縦6マスの領域です。
+
+          配置編集モードの共通座標では、
+          7～8列目、1～6行目に対応します。
+
+          ここにはホールドボタンを配置します。
+        -->
+        <div
+          id="game-right-area"
+          class="game-right-area"
+          role="group"
+          aria-label="右側ゲーム操作">
+
+
+          <!--
+            ホールドボタン
+
+            共通座標：
+              7列目・1行目
+
+            大きさ：
+              横2マス×縦2マス
+
+            初期状態では非表示です。
+          -->
+          <button
+            type="button"
+            id="hold-btn"
+            class="touch-btn"
+            data-action="hold"
+            data-layout-col="7"
+            data-layout-row="1"
+            data-layout-width="2"
+            data-layout-height="2"
+            style="grid-column:1 / span 2; grid-row:1 / span 2;"
+            aria-label="ホールド"
+            hidden>
+
+            HOLD
+
+          </button>
+
+        </div>
+
+
+
+
 
         <!--
           ------------------------------------------------------
@@ -1198,149 +2586,569 @@
 
     <!--
       ============================================================
-      画面下部：7つの操作ボタン
+      設定画面
       ============================================================
 
-      今回追加した操作ボタンです。
+      ゲーム画面とは別に表示する設定画面です。
 
-      左から順番に、
+      hidden属性が付いている間は非表示になります。
 
-        
-        1. 左回転
-        2. 左移動
-        3. 下移動
-        4. 右移動
-        5. 右回転
-        
+      JavaScriptからhidden属性を取り除くと表示され、
+      再び付けると非表示になります。
 
-      という並びになっています。
+      ゲーム画面の上に重ねて表示するため、
+      CSS側では画面全体を覆うように設定します。
 
-      data-action は、各ボタンが何の操作を担当するかを
-      JavaScript側に伝えるための目印です。
-
-      例えば、
-
-        data-action="left"
-
-      と書かれたボタンは、左移動のボタンとして扱います。
-
-      ボタンの位置や役割を変えたい場合は、
-      ここのHTMLとJavaScript側の処理を確認してください。
+      今回は画面の見た目と部品を用意する段階です。
+      各ボタンの実際の動作は、後の手順で設定します。
     -->
-    <div class="touch-controls" role="group" aria-label="ゲーム操作">
-
-
-      <!--
-        1番目：左回転ボタン
-
-        押すたびにブロックを反時計回りに90度回転させます。
-
-        左回転は長押ししても連続回転しません。
-        1回押すごとに1回だけ回転します。
-      -->
-      <button
-        type="button"
-        class="touch-btn"
-        data-action="rotate-left"
-        aria-label="左回転">
-
-        <!-- 左回転：反時計回りの矢印 -->
-        <svg
-          viewBox="0 0 24 24"
-          aria-hidden="true">
-
-          <path d="M3 3v6h6" />
-
-          <path d="M3.05 13A9 9 0 1 0 5.64 5.64L3 9" />
-
-        </svg>
-
-      </button>
-
+    <div id="settings-screen" class="settings-screen" hidden>
 
       <!--
-        2番目：左移動ボタン
-
-        押している間、ブロックを左へ移動させます。
-
-        長押しにも対応しており、
-        押し続けると一定間隔で連続移動します。
+        設定画面の内容をまとめる領域です。
+        role="dialog"などは、画面読み上げ機能などに
+        設定画面であることを伝えるための指定です。
       -->
-      <button
-        type="button"
-        class="touch-btn"
-        data-action="left"
-        aria-label="左へ移動">
+      <section
+        class="settings-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settings-title">
 
-        <span aria-hidden="true">←</span>
+        <!-- 設定画面のタイトル -->
+        <div class="settings-heading">
 
-      </button>
+          <h2 id="settings-title">
+            設定
+          </h2>
 
-
-      <!--
-        3番目：下移動ボタン
-
-        押している間、ブロックを下へ移動させます。
-
-        長押しすると連続して落下します。
-        ブロックが接地した場合は、その場で固定されます。
-      -->
-      <button
-        type="button"
-        class="touch-btn"
-        data-action="down"
-        aria-label="下へ移動">
-
-        <span aria-hidden="true">↓</span>
-
-      </button>
+        </div>
 
 
-      <!--
-        4番目：右移動ボタン
+        <!--
+          --------------------------------------------------------
+          設定項目
+          --------------------------------------------------------
 
-        押している間、ブロックを右へ移動させます。
-
-        左移動ボタンと同じく、長押しに対応しています。
-      -->
-      <button
-        type="button"
-        class="touch-btn"
-        data-action="right"
-        aria-label="右へ移動">
-
-        <span aria-hidden="true">→</span>
-
-      </button>
+          ここに設定用のボタンを並べます。
+        -->
+        <div class="settings-options">
 
 
-      <!--
-        5番目：右回転ボタン
+          <!--
+            ボタン配置モードへ移動するボタン
 
-        押すたびにブロックを時計回りに90度回転させます。
+            操作ボタンの位置や大きさを変更するための
+            専用画面へ移動する予定です。
 
-        左回転と同様、長押ししても連続回転しません。
-      -->
-      <button
-        type="button"
-        class="touch-btn"
-        data-action="rotate-right"
-        aria-label="右回転">
+            現時点では、まだ移動先の画面は作成していません。
+          -->
+          <button
+            type="button"
+            id="settings-layout-btn"
+            class="settings-btn">
 
-        <!-- 右回転：時計回りの矢印 -->
-        <svg
-          viewBox="0 0 24 24"
-          aria-hidden="true">
+            ボタン配置を変更
 
-          <path d="M21 3v6h-6" />
-
-          <path d="M20.95 13A9 9 0 1 1 18.36 5.64L21 9" />
-
-        </svg>
-
-      </button>
+          </button>
 
 
+          <!--
+            ホールド機能のON/OFF
+
+            aria-pressed
+              → 現在ONなのかOFFなのかを表します。
+
+            初期状態はOFFとしておきます。
+
+            後でJavaScriptからON/OFFを切り替えます。
+          -->
+          <button
+            type="button"
+            id="settings-hold-btn"
+            class="settings-btn"
+            aria-pressed="false">
+
+            ホールド機能：OFF
+
+          </button>
+
+
+          <!--
+            クイックドロップ機能のON/OFF
+
+            こちらも初期状態はOFFです。
+
+            実際の機能との連動は後で実装します。
+          -->
+          <button
+            type="button"
+            id="settings-quickdrop-btn"
+            class="settings-btn"
+            aria-pressed="false">
+
+            クイックドロップ：OFF
+
+          </button>
+
+
+        </div>
+
+
+        <!--
+          設定画面を閉じてゲーム画面に戻るボタンです。
+        -->
+        <button
+          type="button"
+          id="settings-close-btn"
+          class="settings-close-btn">
+
+          戻る
+
+        </button>
+
+      </section>
+
+    </div>
+
+    <!--
+      ============================================================
+      ボタン配置設定モード
+      ============================================================
+
+      操作ボタンの位置や大きさを変更するための専用画面です。
+
+      通常のゲーム画面や設定画面とは独立して表示します。
+
+      settings-screenと同じように、
+      hidden属性が付いている間は非表示になります。
+
+      今後、この画面に以下の機能を追加していきます。
+
+        ・操作ボタンのドラッグ移動
+        ・ボタンの大きさの変更
+        ・初期配置へのリセット
+        ・変更した配置の保存
+
+      今回は画面の土台だけを作成します。
+    -->
+    <div id="layout-screen" class="settings-screen" hidden>
+
+      <section
+        class="settings-card layout-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="layout-title">
+
+
+        <!-- 画面タイトル -->
+        <div class="settings-heading">
+
+          <h2 id="layout-title">
+            ボタン配置設定
+          </h2>
+
+        </div>
+
+
+        <!--
+          配置変更画面の説明
+
+          操作ボタンを編集する際の説明を表示する場所です。
+        -->
+        <p class="layout-description">
+          操作ボタンの位置や大きさを調整できます。
+        </p>
+
+        <!-- 配置エリアと仮置き場を横に並べる領域 -->
+        <div class="layout-workspace">
+
+          <!-- 左側：通常のボタン配置エリア -->
+          <section class="layout-workspace-panel">
+
+            <h3 class="layout-workspace-title">
+              配置エリア
+            </h3>
+
+            <!-- 配置できるエリアの色分けを説明 -->
+            <div class="layout-zone-legend">
+
+              <span class="layout-zone-label layout-zone-bottom">
+                下側：6列×2行
+              </span>
+
+              <span class="layout-zone-label layout-zone-right">
+                右側：2列×6行
+              </span>
+
+            </div>
+
+
+        <!--
+          ========================================================
+          ボタン配置の編集領域
+          ========================================================
+
+          今後、実際の操作ボタンを配置する領域です。
+
+          id="layout-editor-area" は、
+          JavaScriptからこの領域を取得するための名前です。
+
+          この中にボタンを配置し、
+          ドラッグ操作によって位置を変更できるようにします。
+
+
+
+          下部と右側の2つの配置領域を作ります。
+
+          全体を横8マス×縦6マスの座標として扱います。
+
+          下部：
+            横6マス×縦2マス
+            全体の左下に配置
+
+          右側：
+            横2マス×縦6マス
+            全体の右側に配置
+
+          どちらも同じ大きさのマスを使用します。
+
+          各マスにはdata属性を付けています。
+
+          これは将来的に、
+          ボタンがどのマスに配置されているかを
+          JavaScriptで管理するためのものです。
+
+
+          下部と右側を1つのGridとして統合します。
+
+          全体の座標は横8マス×縦6マスです。
+
+          配置できる場所はL字型の24マスです。
+
+          下部：
+            列1～6、行5～6
+
+          右側：
+            列7～8、行1～6
+
+          すべてのボタンを同じGridで管理するため、
+          下部から右側、右側から下部への移動が可能になります。
+
+          各ボタンには現在の配置情報をdata属性で保存します。
+
+          data-layout-col
+            → 左端の列番号
+
+          data-layout-row
+            → 上端の行番号
+
+          data-layout-width
+            → 横方向に使用するマス数
+
+          data-layout-height
+            → 縦方向に使用するマス数
+
+          ドラッグ処理では、この4つの情報を更新します。
+        -->
+        <div
+          id="layout-editor-area"
+          class="layout-editor-area"
+          aria-label="ボタン配置の編集領域">
+
+
+          <!--
+            ==========================================================
+            L字型のマス目
+            ==========================================================
+
+            各マスをGridの指定位置に配置します。
+
+            ここではボタンを置くための背景だけを用意しています。
+
+            実際のボタンは、この後に同じ親要素の中へ配置します。
+          -->
+
+
+          <!-- 1行目：右側の2マス -->
+          <div class="layout-grid-cell" style="grid-column:7; grid-row:1;"></div>
+          <div class="layout-grid-cell" style="grid-column:8; grid-row:1;"></div>
+
+
+          <!-- 2行目：右側の2マス -->
+          <div class="layout-grid-cell" style="grid-column:7; grid-row:2;"></div>
+          <div class="layout-grid-cell" style="grid-column:8; grid-row:2;"></div>
+
+
+          <!-- 3行目：右側の2マス -->
+          <div class="layout-grid-cell" style="grid-column:7; grid-row:3;"></div>
+          <div class="layout-grid-cell" style="grid-column:8; grid-row:3;"></div>
+
+
+          <!-- 4行目：右側の2マス -->
+          <div class="layout-grid-cell" style="grid-column:7; grid-row:4;"></div>
+          <div class="layout-grid-cell" style="grid-column:8; grid-row:4;"></div>
+
+
+          <!--
+            5行目：下部6マス＋右側2マス
+          -->
+          <div class="layout-grid-cell" style="grid-column:1; grid-row:5;"></div>
+          <div class="layout-grid-cell" style="grid-column:2; grid-row:5;"></div>
+          <div class="layout-grid-cell" style="grid-column:3; grid-row:5;"></div>
+          <div class="layout-grid-cell" style="grid-column:4; grid-row:5;"></div>
+          <div class="layout-grid-cell" style="grid-column:5; grid-row:5;"></div>
+          <div class="layout-grid-cell" style="grid-column:6; grid-row:5;"></div>
+          <div class="layout-grid-cell" style="grid-column:7; grid-row:5;"></div>
+          <div class="layout-grid-cell" style="grid-column:8; grid-row:5;"></div>
+
+
+          <!--
+            6行目：下部6マス＋右側2マス
+          -->
+          <div class="layout-grid-cell" style="grid-column:1; grid-row:6;"></div>
+          <div class="layout-grid-cell" style="grid-column:2; grid-row:6;"></div>
+          <div class="layout-grid-cell" style="grid-column:3; grid-row:6;"></div>
+          <div class="layout-grid-cell" style="grid-column:4; grid-row:6;"></div>
+          <div class="layout-grid-cell" style="grid-column:5; grid-row:6;"></div>
+          <div class="layout-grid-cell" style="grid-column:6; grid-row:6;"></div>
+          <div class="layout-grid-cell" style="grid-column:7; grid-row:6;"></div>
+          <div class="layout-grid-cell" style="grid-column:8; grid-row:6;"></div>
+
+
+
+          <!--
+            ==========================================================
+            操作ボタン
+            ==========================================================
+
+            すべてのボタンを親Gridの直接の子要素にしています。
+
+            これによって、下部と右側の区別なく、
+            同じ座標を使って配置できるようになります。
+
+            初期配置は、これまで決めたものを維持しています。
+          -->
+
+
+          <!-- 左回転：横2マス×縦1マス -->
+          <button
+            type="button"
+            class="layout-preview-btn"
+            data-layout-action="rotate-left"
+            data-layout-col="1"
+            data-layout-row="5"
+            data-layout-width="2"
+            data-layout-height="1"
+            style="grid-column:1 / span 2; grid-row:5 / span 1;"
+            aria-label="左回転">
+
+            ↶
+
+          </button>
+
+
+          <!-- クイックドロップ：横2マス×縦1マス -->
+          <button
+            type="button"
+            class="layout-preview-btn"
+            data-layout-action="quick-drop"
+            data-layout-col="3"
+            data-layout-row="5"
+            data-layout-width="2"
+            data-layout-height="1"
+            style="grid-column:3 / span 2; grid-row:5 / span 1;">
+
+            DROP
+
+          </button>
+
+
+          <!-- 右回転：横2マス×縦1マス -->
+          <button
+            type="button"
+            class="layout-preview-btn"
+            data-layout-action="rotate-right"
+            data-layout-col="5"
+            data-layout-row="5"
+            data-layout-width="2"
+            data-layout-height="1"
+            style="grid-column:5 / span 2; grid-row:5 / span 1;"
+            aria-label="右回転">
+
+            ↷
+
+          </button>
+
+
+          <!-- 左移動：横2マス×縦1マス -->
+          <button
+            type="button"
+            class="layout-preview-btn"
+            data-layout-action="left"
+            data-layout-col="1"
+            data-layout-row="6"
+            data-layout-width="2"
+            data-layout-height="1"
+            style="grid-column:1 / span 2; grid-row:6 / span 1;">
+
+            ←
+
+          </button>
+
+
+          <!-- 下移動：横2マス×縦1マス -->
+          <button
+            type="button"
+            class="layout-preview-btn"
+            data-layout-action="down"
+            data-layout-col="3"
+            data-layout-row="6"
+            data-layout-width="2"
+            data-layout-height="1"
+            style="grid-column:3 / span 2; grid-row:6 / span 1;">
+
+            ↓
+
+          </button>
+
+
+          <!-- 右移動：横2マス×縦1マス -->
+          <button
+            type="button"
+            class="layout-preview-btn"
+            data-layout-action="right"
+            data-layout-col="5"
+            data-layout-row="6"
+            data-layout-width="2"
+            data-layout-height="1"
+            style="grid-column:5 / span 2; grid-row:6 / span 1;">
+
+            →
+
+          </button>
+
+
+          <!--
+            ホールド：横2マス×縦2マス
+
+            右側の1～2行目に配置します。
+          -->
+          <button
+            type="button"
+            class="layout-preview-btn layout-preview-hold"
+            data-layout-action="hold"
+            data-layout-col="7"
+            data-layout-row="1"
+            data-layout-width="2"
+            data-layout-height="2"
+            style="grid-column:7 / span 2; grid-row:1 / span 2;">
+
+            HOLD
+
+          </button>
+
+
+        </div>
+
+            <!-- 配置エリアについての注意書き -->
+            <p class="layout-area-note">
+              下側エリアと右側エリアをまたいで
+              ボタンを配置することはできません。
+            </p>
+
+          </section>
+
+
+          <!-- 右側：仮置き場 -->
+          <section class="layout-workspace-panel">
+
+            <h3 class="layout-workspace-title">
+              仮置き場
+            </h3>
+
+            <!--
+              横8列×縦6行の一時退避用グリッドです。
+
+              今後、大きさ変更モードで選択したボタンを
+              ここに移動させる予定です。
+            -->
+            <div
+              id="layout-staging-area"
+              class="layout-staging-area"
+              aria-label="ボタンの仮置き場">
+            </div>
+
+            <p class="layout-staging-description">
+              ボタンを一時的に置くための場所です。
+            </p>
+
+          </section>
+
+        </div>
+
+        <!--
+          ============================================================
+          配置保存ボタン
+          ============================================================
+
+          現在のボタン配置をブラウザ内に保存するためのボタンです。
+
+          保存対象：
+            ・ボタンの横位置
+            ・ボタンの縦位置
+            ・ボタンの横幅
+            ・ボタンの高さ
+
+          将来的にボタンサイズを変更できるようになった場合も、
+          同じ仕組みでサイズを保存できるようにしています。
+        -->
+        <button
+          type="button"
+          id="layout-save-btn"
+          class="settings-btn">
+
+          配置を保存
+
+        </button>
+
+
+        <!--
+          保存結果を表示する場所です。
+
+          aria-live="polite"は、
+          保存結果が変更されたときに画面読み上げ機能へ
+          変更を伝えるための指定です。
+        -->
+        <p
+          id="layout-save-status"
+          class="layout-save-status"
+          aria-live="polite">
+        </p>
+
+        <!-- 大きさ変更モードへの切り替え -->
+        <button
+          type="button"
+          id="layout-size-mode-btn"
+          class="settings-btn"
+          disabled>
+
+          ボタンの大きさを変更（準備中）
+
+        </button>
+
+        <!-- 設定画面に戻るボタン -->
+        <button
+          type="button"
+          id="layout-close-btn"
+          class="settings-close-btn">
+
+          設定に戻る
+
+        </button>
+
+
+      </section>
 
     </div>
 
@@ -1533,6 +3341,16 @@
       // 盤面の上に表示するメッセージ領域を取得します。
       const overlay = document.getElementById("overlay");
 
+      // 設定画面全体を取得します。
+      const settingsScreen = document.getElementById("settings-screen");
+
+      // ボタン配置設定画面全体を取得します。
+      const layoutScreen = document.getElementById("layout-screen");
+
+      // ボタン配置編集領域を取得します。
+      // この領域を基準に、ドラッグしたボタンの配置先を計算します。
+      const layoutEditorArea = document.getElementById("layout-editor-area");
+
       // メッセージの見出し部分を取得します。
       const titleEl = document.getElementById("overlay-title");
 
@@ -1628,6 +3446,19 @@
       let gameOver;
       let clearedPuzzle;
 
+      /*
+        設定画面を開く直前の一時停止状態を保存します。
+
+        設定画面を閉じたとき、
+        開く前の状態に戻すために使用します。
+
+        例えば、
+          通常プレイ中に設定を開く → 閉じたらプレイ再開
+          一時停止中に設定を開く → 閉じても一時停止のまま
+
+        という動作にするための変数です。
+      */
+      let pausedBeforeSettings = false;
 
 
       /*
@@ -2972,6 +4803,1589 @@
 
       }
 
+      /*
+        ============================================================
+        設定画面を開く
+        ============================================================
+
+        設定画面を表示し、その間ゲームを一時停止します。
+
+        ただし、ゲームが開く前から一時停止中だった場合もあるため、
+        現在のpausedの状態を先に保存しておきます。
+      */
+      function openSettings() {
+
+        // 設定画面を開く直前の状態を保存します。
+        pausedBeforeSettings = paused;
+
+        // ゲームを一時停止させます。
+        paused = true;
+
+        // 設定画面を表示します。
+        settingsScreen.hidden = false;
+
+      }
+
+
+      /*
+        ============================================================
+        設定画面を閉じる
+        ============================================================
+
+        設定画面を非表示にし、
+        開く前のゲーム状態に戻します。
+      */
+      function closeSettings() {
+
+        // 設定画面を非表示にします。
+        settingsScreen.hidden = true;
+
+        // 開く前の一時停止状態に戻します。
+        paused = pausedBeforeSettings;
+
+        /*
+          時間計測をリセットします。
+
+          設定画面を開いていた時間が、
+          ゲーム再開直後の落下処理に影響しないようにします。
+        */
+        lastTime = 0;
+
+      }
+
+      /*
+        ============================================================
+        ボタン配置モードを開く
+        ============================================================
+
+        設定画面からボタン配置モードへ移動します。
+
+        処理の流れ：
+          ① 設定画面を非表示にする
+          ② ボタン配置画面を表示する
+
+        注意：
+        ここではpausedの状態を変更しません。
+
+        設定画面を開いた時点でゲームは一時停止しているため、
+        ボタン配置モードでもその状態を維持します。
+      */
+      function openLayoutEditor() {
+
+        // 設定画面を非表示にします。
+        settingsScreen.hidden = true;
+
+        // ボタン配置画面を表示します。
+        layoutScreen.hidden = false;
+
+      }
+
+
+      /*
+        ============================================================
+        ボタン配置モードを閉じる
+        ============================================================
+
+        ボタン配置モードから設定画面へ戻ります。
+
+        処理の流れ：
+          ① ボタン配置画面を非表示にする
+          ② 設定画面を再表示する
+
+        ここでもゲームの一時停止状態は変更しません。
+
+        そのため、配置編集を終えて設定画面に戻っても、
+        ゲームが勝手に再開することはありません。
+      */
+      function closeLayoutEditor() {
+
+        
+
+        // ボタン配置画面を非表示にします。
+        layoutScreen.hidden = true;
+
+        // 設定画面を再表示します。
+        settingsScreen.hidden = false;
+
+      }
+
+      /*
+        ============================================================
+        ボタン配置のドラッグ管理
+        ============================================================
+
+        今回追加するドラッグ機能全体を管理します。
+
+        layoutDrag
+          → 現在ドラッグしているボタンの情報を保存します。
+
+        ドラッグしていないときはnullになります。
+
+        保存する情報：
+          button     → 移動中のボタン
+          pointerId  → 操作している指やマウスの識別番号
+          offsetX    → ボタンの左端から押した位置までの距離
+          offsetY    → ボタンの上端から押した位置までの距離
+      */
+      let layoutDrag = null;
+
+
+      /*
+        ============================================================
+        配置可能な場所かどうかを確認する
+        ============================================================
+
+        button
+          → 移動させようとしているボタン
+
+        col
+          → 移動先の左端の列番号
+
+        row
+          → 移動先の上端の行番号
+
+        この関数では、次の3つを確認します。
+
+          ① L字型のマス目からはみ出していないか
+          ② 空白部分に配置しようとしていないか
+          ③ 他のボタンと重なっていないか
+
+        すべて問題なければtrueを返します。
+        1つでも問題があればfalseを返します。
+      */
+      function isValidLayoutPosition(button, col, row) {
+
+        // 移動対象のボタンが使用するマス数を取得します。
+        const width = Number(button.dataset.layoutWidth);
+        const height = Number(button.dataset.layoutHeight);
+
+
+        /*
+          ----------------------------------------------------------
+          ① 配置範囲の確認
+          ----------------------------------------------------------
+
+          全体は横8マス×縦6マスです。
+
+          左端は1列目、上端は1行目です。
+
+          ボタンの右端・下端が範囲を超えないか確認します。
+        */
+        if (
+          col < 1 ||
+          row < 1 ||
+          col + width - 1 > 8 ||
+          row + height - 1 > 6
+        ) {
+
+          return false;
+
+        }
+
+        /*
+          ----------------------------------------------------------
+          左右の領域をまたいでいないか確認
+          ----------------------------------------------------------
+
+          実際のゲーム画面では、下部と右側を
+          別々のGridとして管理します。
+
+          そのため、1つのボタンが両方の領域にまたがる配置は
+          許可しません。
+
+          下部：
+            横1～6列
+            縦5～6行
+
+          右側：
+            横7～8列
+            縦1～6行
+
+          isBottomRegion
+            → ボタン全体が下部に収まっているか
+
+          isRightRegion
+            → ボタン全体が右側に収まっているか
+        */
+
+        // ボタン全体が下部の範囲に収まっているか確認します。
+        const isBottomRegion =
+          col >= 1 &&
+          col + width - 1 <= 6 &&
+          row >= 5 &&
+          row + height - 1 <= 6;
+
+
+        // ボタン全体が右側の範囲に収まっているか確認します。
+        const isRightRegion =
+          col >= 7 &&
+          col + width - 1 <= 8 &&
+          row >= 1 &&
+          row + height - 1 <= 6;
+
+
+        // どちらにも収まっていなければ配置できません。
+        if (!isBottomRegion && !isRightRegion) {
+          return false;
+        }
+
+
+        /*
+          ----------------------------------------------------------
+          ② L字型の空白部分に入っていないか確認
+          ----------------------------------------------------------
+
+          配置できる範囲は次のとおりです。
+
+          下部：
+            1～6列目、5～6行目
+
+          右側：
+            7～8列目、1～6行目
+
+          つまり、
+
+            row >= 5
+              または
+            col >= 7
+
+          のどちらかを満たす場所だけが有効です。
+
+          ボタンが複数マスを使用する場合は、
+          そのボタンが占有するすべてのマスを確認します。
+        */
+        for (let y = row; y < row + height; y++) {
+
+          for (let x = col; x < col + width; x++) {
+
+            /*
+              5行目・6行目なら横8列すべて使用可能です。
+
+              それより上の行では7列目・8列目だけ使用できます。
+            */
+            const isAllowed =
+              y >= 5 || x >= 7;
+
+            if (!isAllowed) {
+
+              return false;
+
+            }
+
+          }
+
+        }
+
+
+        /*
+          ----------------------------------------------------------
+          ③ 他のボタンとの重なりを確認
+          ----------------------------------------------------------
+
+          配置編集領域に存在するすべての操作ボタンを調べます。
+
+          現在移動させているボタン自身は、
+          重なり判定から除外します。
+        */
+        const buttons =
+          layoutEditorArea.querySelectorAll(".layout-preview-btn");
+
+
+        for (const other of buttons) {
+
+          // 自分自身との重なりは確認しません。
+          if (other === button) continue;
+
+
+          // 比較対象となるボタンの現在位置と大きさを取得します。
+          const otherCol = Number(other.dataset.layoutCol);
+          const otherRow = Number(other.dataset.layoutRow);
+
+          const otherWidth = Number(other.dataset.layoutWidth);
+          const otherHeight = Number(other.dataset.layoutHeight);
+
+
+          /*
+            2つの長方形が重なっているかを判定します。
+
+            例えば、
+              移動先が別のボタンの左側にある
+              移動先が別のボタンの右側にある
+              移動先が別のボタンの上側にある
+              移動先が別のボタンの下側にある
+
+            いずれかであれば重なっていません。
+
+            反対に、どの方向にも完全に離れていなければ、
+            ボタン同士が重なっています。
+          */
+          const overlaps =
+            col < otherCol + otherWidth &&
+            col + width > otherCol &&
+            row < otherRow + otherHeight &&
+            row + height > otherRow;
+
+
+          if (overlaps) {
+
+            return false;
+
+          }
+
+        }
+
+
+        // すべての確認を通過したので配置可能です。
+        return true;
+
+      }
+
+
+      /*
+        ============================================================
+        ボタンの配置を更新する
+        ============================================================
+
+        button
+          → 配置を変更するボタン
+
+        col・row
+          → 新しい配置位置
+
+        この関数では、次の2つを同時に更新します。
+
+          ① HTMLのdata属性
+          ② CSS Grid上の実際の配置
+
+        data属性は後で配置を保存するときにも利用します。
+      */
+      function setLayoutButtonPosition(button, col, row) {
+
+        // ボタンが占有するマス数を取得します。
+        const width = Number(button.dataset.layoutWidth);
+        const height = Number(button.dataset.layoutHeight);
+
+
+        /*
+          ----------------------------------------------------------
+          data属性の更新
+          ----------------------------------------------------------
+
+          現在のボタン位置をHTML側にも記録します。
+
+          これによって、次の移動時にも
+          最新の配置情報を取得できます。
+        */
+        button.dataset.layoutCol = col;
+        button.dataset.layoutRow = row;
+
+
+        /*
+          ----------------------------------------------------------
+          CSS Gridの配置を更新
+          ----------------------------------------------------------
+
+          grid-column
+            → 横方向の配置
+
+          grid-row
+            → 縦方向の配置
+
+          spanを使うことで、
+          ボタンが使用するマス数を維持できます。
+
+          例えば、横2マス×縦1マスのボタンを
+          3列目・5行目に配置する場合、
+
+            grid-column: 3 / span 2
+            grid-row: 5 / span 1
+
+          となります。
+        */
+        button.style.gridColumn =
+          `${col} / span ${width}`;
+
+        button.style.gridRow =
+          `${row} / span ${height}`;
+
+      }
+
+      /*
+        ============================================================
+        配置編集モードの座標をゲーム画面へ反映する
+        ============================================================
+
+        配置編集モード：
+          共通の横8列×縦6行
+
+        ゲーム画面：
+          左側 → 横6列×縦2行
+          右側 → 横2列×縦6行
+
+        この2つの座標の違いを変換する関数です。
+
+        重要：
+        配置編集モードで保存した位置を変更するのではなく、
+        ゲーム画面側のボタンの位置だけを変更します。
+
+        ------------------------------------------------------------
+        座標の変換方法
+        ------------------------------------------------------------
+
+        【下部に配置する場合】
+
+        配置編集モード：
+          列1～6、行5～6
+
+        ゲーム画面：
+          列1～6、行1～2
+
+        そのため、
+          ゲーム画面の列 = 配置編集モードの列
+          ゲーム画面の行 = 配置編集モードの行 - 4
+
+        【右側に配置する場合】
+
+        配置編集モード：
+          列7～8、行1～6
+
+        ゲーム画面：
+          列1～2、行1～6
+
+        そのため、
+          ゲーム画面の列 = 配置編集モードの列 - 6
+          ゲーム画面の行 = 配置編集モードの行
+
+        ------------------------------------------------------------
+        ボタンの移動方法
+        ------------------------------------------------------------
+
+        appendChild()を使って、実際のゲームボタンを
+        左側または右側のGridへ移動させます。
+
+        HTML要素そのものを移動するため、
+        既に登録されているクリック・タッチイベントは維持されます。
+      */
+      function applyLayoutToGame() {
+
+        // 左側の操作領域を取得します。
+        const bottomArea =
+          document.getElementById("game-bottom-area");
+
+        // 右側の操作領域を取得します。
+        const rightArea =
+          document.getElementById("game-right-area");
+
+
+        /*
+          必要なHTML要素が見つからない場合は終了します。
+
+          HTMLのIDを変更した場合などに備えた確認です。
+        */
+        if (!bottomArea || !rightArea) {
+
+          console.warn("ゲーム画面の操作領域が見つかりません。");
+
+          return;
+
+        }
+
+
+        /*
+          ----------------------------------------------------------
+          ① 配置編集モードのボタンを取得
+          ----------------------------------------------------------
+
+          こちらには、常に7種類のボタンがあります。
+
+          表示・非表示に関係なく、すべて取得します。
+        */
+        const previewButtons =
+          layoutEditorArea.querySelectorAll(
+            ".layout-preview-btn"
+          );
+
+
+        /*
+          ----------------------------------------------------------
+          ② 実際のゲーム画面のボタンを取得
+          ----------------------------------------------------------
+
+          現在は左右のどちらかに配置されています。
+
+          今回は、両方の領域にあるボタンをまとめて取得します。
+
+          querySelectorAll()で取得したリストは、
+          取得時点の要素を保持します。
+
+          そのため、この後appendChild()で移動させても、
+          残りのボタンを探すことができます。
+        */
+        const gameButtons = Array.from(
+          document.querySelectorAll(
+            "#game-bottom-area .touch-btn, " +
+            "#game-right-area .touch-btn"
+          )
+        );
+
+
+        /*
+          ==========================================================
+          ③ 7種類のボタンを順番に処理
+          ==========================================================
+        */
+        previewButtons.forEach(previewButton => {
+
+
+          /*
+            --------------------------------------------------------
+            ボタンの種類を取得
+            --------------------------------------------------------
+
+            配置編集モード側：
+              data-layout-action
+
+            ゲーム画面側：
+              data-action
+
+            名前を照合して、対応するボタンを探します。
+          */
+          const action =
+            previewButton.dataset.layoutAction;
+
+
+          const gameButton = gameButtons.find(
+            button => button.dataset.action === action
+          );
+
+
+          // 対応するボタンが見つからなければ処理しません。
+          if (!gameButton) {
+
+            console.warn(
+              `ゲーム画面に ${action} のボタンが見つかりません。`
+            );
+
+            return;
+
+          }
+
+
+          /*
+            --------------------------------------------------------
+            配置編集モードで保存されている座標を取得
+            --------------------------------------------------------
+          */
+          const col =
+            Number(previewButton.dataset.layoutCol);
+
+          const row =
+            Number(previewButton.dataset.layoutRow);
+
+          const width =
+            Number(previewButton.dataset.layoutWidth);
+
+          const height =
+            Number(previewButton.dataset.layoutHeight);
+
+
+          /*
+            --------------------------------------------------------
+            ④ どちらの領域に配置するか判定
+            --------------------------------------------------------
+
+            すでにisValidLayoutPosition()で配置範囲を制限していますが、
+            念のためここでも確認します。
+
+            下部：
+              1～6列、5～6行
+
+            右側：
+              7～8列、1～6行
+          */
+          const isBottomRegion =
+            col >= 1 &&
+            col + width - 1 <= 6 &&
+            row >= 5 &&
+            row + height - 1 <= 6;
+
+
+          const isRightRegion =
+            col >= 7 &&
+            col + width - 1 <= 8 &&
+            row >= 1 &&
+            row + height - 1 <= 6;
+
+
+          // どちらにも正しく収まらなければ適用しません。
+          if (!isBottomRegion && !isRightRegion) {
+
+            console.warn(
+              `${action} の配置が正しくありません。`
+            );
+
+            return;
+
+          }
+
+
+          /*
+            --------------------------------------------------------
+            ⑤ ゲーム画面用の座標に変換
+            --------------------------------------------------------
+
+            変換後の列・行を保存する変数です。
+          */
+          let localCol;
+          let localRow;
+
+          let destination;
+
+
+          if (isBottomRegion) {
+
+            /*
+              下部に配置する場合
+
+              配置編集モード：
+                列1～6、行5～6
+
+              ゲーム画面：
+                列1～6、行1～2
+            */
+            destination = bottomArea;
+
+            localCol = col;
+
+            localRow = row - 4;
+
+          } else {
+
+            /*
+              右側に配置する場合
+
+              配置編集モード：
+                列7～8、行1～6
+
+              ゲーム画面：
+                列1～2、行1～6
+            */
+            destination = rightArea;
+
+            localCol = col - 6;
+
+            localRow = row;
+
+          }
+
+
+          /*
+            --------------------------------------------------------
+            ⑥ 実際のゲームボタンを移動
+            --------------------------------------------------------
+
+            appendChild()によって、
+            ボタンを目的のGridの中へ移動させます。
+
+            すでに同じGridにある場合は、
+            そのままそのGrid内で位置を更新します。
+          */
+          destination.appendChild(gameButton);
+
+
+          /*
+            --------------------------------------------------------
+            ⑦ 保存情報をゲーム画面側にも反映
+            --------------------------------------------------------
+
+            data属性には共通座標を保存します。
+
+            一方、CSS Gridには変換後のローカル座標を指定します。
+
+            この区別が重要です。
+
+            共通座標：
+              配置編集モード・保存処理で使用
+
+            ローカル座標：
+              実際のゲーム画面の表示で使用
+          */
+          gameButton.dataset.layoutCol = col;
+
+          gameButton.dataset.layoutRow = row;
+
+          gameButton.dataset.layoutWidth = width;
+
+          gameButton.dataset.layoutHeight = height;
+
+
+          // 左右それぞれのGrid内での表示位置を設定します。
+          gameButton.style.gridColumn =
+            `${localCol} / span ${width}`;
+
+          gameButton.style.gridRow =
+            `${localRow} / span ${height}`;
+
+        });
+
+
+      }
+
+      /*
+        ============================================================
+        ボタン配置の保存
+        ============================================================
+
+        現在のボタン配置をlocalStorageに保存します。
+
+        localStorageとは：
+          ブラウザ内部にデータを保存しておける仕組みです。
+
+          ページを再読み込みしてもデータが残ります。
+
+        今回保存する情報：
+
+          action
+            → ボタンの種類
+
+          col
+            → 横方向の配置位置
+
+          row
+            → 縦方向の配置位置
+
+          width
+            → 横方向に使用するマス数
+
+          height
+            → 縦方向に使用するマス数
+
+        JSON.stringify()を使ってデータを文字列に変換し、
+        localStorageへ保存します。
+      */
+      function saveLayout() {
+
+        // 配置編集領域にあるすべての操作ボタンを取得します。
+        const buttons =
+          layoutEditorArea.querySelectorAll(".layout-preview-btn");
+
+
+        /*
+          ----------------------------------------------------------
+          ① 保存するデータを作成
+          ----------------------------------------------------------
+
+          map()を使って、各ボタンの配置情報を取り出します。
+
+          ボタンそのものを保存するのではなく、
+          ボタンの種類と配置情報だけを保存します。
+        */
+        const layoutData = Array.from(buttons).map(button => ({
+
+          action: button.dataset.layoutAction,
+
+          col: Number(button.dataset.layoutCol),
+
+          row: Number(button.dataset.layoutRow),
+
+          width: Number(button.dataset.layoutWidth),
+
+          height: Number(button.dataset.layoutHeight)
+
+        }));
+
+
+        /*
+          ----------------------------------------------------------
+          ② localStorageへ保存
+          ----------------------------------------------------------
+
+          "keshiRisuButtonLayout"という名前で保存します。
+
+          この名前は保存データを識別するためのキーです。
+
+          今後、別の設定を保存する場合は、
+          別のキーを使用することでデータを区別できます。
+        */
+        try {
+
+          localStorage.setItem(
+            "keshiRisuButtonLayout",
+            JSON.stringify(layoutData)
+          );
+
+          // 保存した配置を実際のゲーム画面にも反映します。
+          applyLayoutToGame();
+
+          // 保存できた場合は画面に結果を表示します。
+          document.getElementById("layout-save-status").textContent =
+            "配置を保存しました！";
+
+
+        } catch (error) {
+
+          /*
+            保存に失敗した場合です。
+
+            ブラウザの設定などによっては、
+            localStorageが利用できない場合があります。
+          */
+          document.getElementById("layout-save-status").textContent =
+            "保存できませんでした。ブラウザの設定を確認してください。";
+
+          console.error("ボタン配置の保存に失敗しました。", error);
+
+        }
+
+      }
+
+      /*
+        ============================================================
+        保存したボタン配置の読み込み
+        ============================================================
+
+        localStorageに保存されているボタン配置を読み込み、
+        配置編集画面に反映する関数です。
+
+        この関数はゲーム起動時に1回実行します。
+
+        保存されている情報：
+          ・ボタンの種類
+          ・横方向の配置位置
+          ・縦方向の配置位置
+          ・横方向に使用するマス数
+          ・縦方向に使用するマス数
+
+        読み込み時には、保存データが正しいか確認します。
+
+        例えば、
+          ・存在しないボタンの情報が含まれている
+          ・マス目の範囲外に配置されている
+          ・ボタン同士が重なっている
+          ・L字型の配置範囲からはみ出している
+
+        といった場合は、保存データを適用しません。
+      */
+      function loadLayout() {
+
+        try {
+
+          /*
+            ----------------------------------------------------------
+            ① 保存データを取得
+            ----------------------------------------------------------
+
+            saveLayout()で使用したものと同じ名前を指定します。
+
+            保存データが存在しない場合はnullが返ってきます。
+
+            その場合は初期配置のままにします。
+          */
+          const savedText = localStorage.getItem(
+            "keshiRisuButtonLayout"
+          );
+
+          if (!savedText) return;
+
+
+          /*
+            JSON.parse()
+              → localStorageに保存した文字列を、
+                JavaScriptで扱える配列・オブジェクトに戻します。
+          */
+          const savedData = JSON.parse(savedText);
+
+
+          // 保存データが配列でなければ読み込みません。
+          if (!Array.isArray(savedData)) return;
+
+
+          /*
+            ----------------------------------------------------------
+            ② 現在存在するボタンを取得
+            ----------------------------------------------------------
+
+            HTML側に存在するすべての配置編集用ボタンを取得します。
+
+            保存データと現在のボタンを、
+            data-layout-actionを使って対応させます。
+          */
+          const buttons = Array.from(
+            layoutEditorArea.querySelectorAll(
+              ".layout-preview-btn"
+            )
+          );
+
+
+          /*
+            現在のボタン数と保存データの数が違う場合は、
+            適用しないようにします。
+
+            将来ボタンの種類が増えた場合などに、
+            古い保存データが不完全な状態で適用されるのを防ぎます。
+          */
+          if (savedData.length !== buttons.length) {
+            console.warn("保存されたボタン配置の数が一致しません。");
+            return;
+          }
+
+
+          /*
+            ----------------------------------------------------------
+            ③ 保存データを検証
+            ----------------------------------------------------------
+
+            ここでは、すべてのボタンの配置が正しいか確認します。
+
+            注意：
+            まだ実際のボタン位置は変更しません。
+
+            すべてのデータを確認して問題がなければ、
+            最後にまとめて配置を反映します。
+          */
+          const proposedPositions = [];
+
+          const usedActions = new Set();
+
+
+          for (const data of savedData) {
+
+            // 保存データの基本的な形式を確認します。
+            if (!data || typeof data !== "object") {
+              console.warn("保存データの形式が正しくありません。");
+              return;
+            }
+
+
+            // ボタンの種類を確認します。
+            if (typeof data.action !== "string") {
+              console.warn("ボタンの種類が正しくありません。");
+              return;
+            }
+
+
+            /*
+              同じ種類のボタンが複数登録されていないか確認します。
+            */
+            if (usedActions.has(data.action)) {
+              console.warn("同じボタンが複数登録されています。");
+              return;
+            }
+
+            usedActions.add(data.action);
+
+
+            /*
+              HTML側から、対応するボタンを探します。
+            */
+            const button = buttons.find(
+              item => item.dataset.layoutAction === data.action
+            );
+
+
+            // 対応するボタンが存在しない場合は適用しません。
+            if (!button) {
+              console.warn("保存データに対応するボタンがありません。");
+              return;
+            }
+
+
+            /*
+              --------------------------------------------------------
+              配置情報を数値として取得
+              --------------------------------------------------------
+            */
+            const col = data.col;
+            const row = data.row;
+
+            const width = data.width;
+            const height = data.height;
+
+
+            /*
+              整数であるか確認します。
+
+              例えば、
+                3
+                5
+                8
+
+              は有効ですが、
+
+                2.5
+                "abc"
+                null
+
+              などは無効です。
+            */
+            if (
+              !Number.isInteger(col) ||
+              !Number.isInteger(row) ||
+              !Number.isInteger(width) ||
+              !Number.isInteger(height)
+            ) {
+
+              console.warn("配置情報に不正な数値があります。");
+              return;
+
+            }
+
+
+            /*
+              --------------------------------------------------------
+              ボタンサイズの確認
+              --------------------------------------------------------
+
+              現段階ではボタンサイズを変更できないため、
+              HTML側で設定している大きさと一致している必要があります。
+
+              将来サイズ変更機能を実装した際には、
+              この部分も変更します。
+            */
+            if (
+              width !== Number(button.dataset.layoutWidth) ||
+              height !== Number(button.dataset.layoutHeight)
+            ) {
+
+              console.warn("保存されたボタンサイズが一致しません。");
+              return;
+
+            }
+
+
+            // ボタンの大きさが1マス以上あるか確認します。
+            if (width < 1 || height < 1) {
+              return;
+            }
+
+
+            /*
+              --------------------------------------------------------
+              ④ マス目からはみ出していないか確認
+              --------------------------------------------------------
+
+              全体は横8マス×縦6マスです。
+
+              ボタンの右端・下端が範囲を超えないか確認します。
+            */
+            if (
+              col < 1 ||
+              row < 1 ||
+              col + width - 1 > 8 ||
+              row + height - 1 > 6
+            ) {
+
+              console.warn("保存された配置が範囲外です。");
+              return;
+
+            }
+
+
+            /*
+              --------------------------------------------------------
+              ⑤ L字型の配置範囲を確認
+              --------------------------------------------------------
+
+              下部：
+                1～6列目、5～6行目
+
+              右側：
+                7～8列目、1～6行目
+
+              ボタンが占有するすべてのマスを確認します。
+            */
+            for (let y = row; y < row + height; y++) {
+
+              for (let x = col; x < col + width; x++) {
+
+                const isAllowed =
+                  y >= 5 || x >= 7;
+
+                if (!isAllowed) {
+
+                  console.warn("保存された配置がL字型の範囲外です。");
+                  return;
+
+                }
+
+              }
+
+            }
+
+
+            /*
+              ここまで問題がなければ、
+              仮の配置情報として保存しておきます。
+
+              まだ画面上のボタン位置は変更していません。
+            */
+            proposedPositions.push({
+
+              button,
+              col,
+              row,
+              width,
+              height
+
+            });
+
+          }
+
+
+          /*
+            ----------------------------------------------------------
+            ⑥ ボタン同士が重なっていないか確認
+            ----------------------------------------------------------
+
+            保存された配置情報同士を比較します。
+
+            既存の画面配置ではなく、
+            これから適用する予定の配置同士を確認することが重要です。
+          */
+          for (
+            let i = 0;
+            i < proposedPositions.length;
+            i++
+          ) {
+
+            for (
+              let j = i + 1;
+              j < proposedPositions.length;
+              j++
+            ) {
+
+              const a = proposedPositions[i];
+              const b = proposedPositions[j];
+
+
+              const overlaps =
+                a.col < b.col + b.width &&
+                a.col + a.width > b.col &&
+                a.row < b.row + b.height &&
+                a.row + a.height > b.row;
+
+
+              if (overlaps) {
+
+                console.warn("保存されたボタン配置が重なっています。");
+                return;
+
+              }
+
+            }
+
+          }
+
+
+          /*
+            ----------------------------------------------------------
+            ⑦ すべての確認が完了したので配置を反映
+            ----------------------------------------------------------
+
+            ここまでエラーがなければ、
+            保存された座標を実際のボタンへ反映します。
+
+            setLayoutButtonPosition()を利用することで、
+            data属性とCSS Gridの両方を更新できます。
+          */
+          for (const item of proposedPositions) {
+
+            setLayoutButtonPosition(
+              item.button,
+              item.col,
+              item.row
+            );
+
+          }
+
+
+          console.log("ボタン配置を読み込みました。");
+
+
+        } catch (error) {
+
+          /*
+            ----------------------------------------------------------
+            読み込みに失敗した場合
+            ----------------------------------------------------------
+
+            localStorageが利用できない場合や、
+            保存データが壊れている場合などに実行されます。
+
+            読み込みに失敗しても、
+            HTMLに記述されている初期配置でゲームを利用できます。
+          */
+          console.error(
+            "ボタン配置の読み込みに失敗しました。",
+            error
+          );
+
+        }
+
+      }
+
+      /*
+        ============================================================
+        ドラッグ開始
+        ============================================================
+
+        ボタンを押した瞬間に呼び出します。
+
+        Pointer Eventsを使用しているため、
+        PCのマウスとスマートフォンのタッチを
+        同じ処理で扱えます。
+      */
+      function startLayoutDrag(event) {
+
+        // ボタン配置画面が閉じている場合は何もしません。
+        if (layoutScreen.hidden) return;
+
+
+        // マウスの右クリックなどはドラッグに使用しません。
+        if (
+          event.pointerType === "mouse" &&
+          event.button !== 0
+        ) {
+
+          return;
+
+        }
+
+
+        // ブラウザ標準のタッチ・選択操作を抑制します。
+        event.preventDefault();
+
+
+        // 今回押されたボタンを取得します。
+        const button = event.currentTarget;
+
+
+        /*
+          ----------------------------------------------------------
+          押した位置を記録
+          ----------------------------------------------------------
+
+          ボタンの中央を押した場合と、
+          端を押した場合で、ドラッグ時の位置がずれないようにします。
+
+          例えばボタンの右端を押したなら、
+          移動中もその右端付近に指がある状態を維持します。
+        */
+        const rect = button.getBoundingClientRect();
+
+
+        // 現在のドラッグ情報を保存します。
+        layoutDrag = {
+
+          button: button,
+
+          pointerId: event.pointerId,
+
+          offsetX: event.clientX - rect.left,
+
+          offsetY: event.clientY - rect.top
+
+        };
+
+
+        /*
+          ポインターキャプチャを設定します。
+
+          ボタンを押したまま指やマウスがボタンの外へ移動しても、
+          ドラッグ操作を継続できるようにします。
+        */
+        try {
+
+          button.setPointerCapture(event.pointerId);
+
+        } catch (error) {
+
+          // キャプチャに失敗した場合も通常の処理は継続します。
+
+        }
+
+
+        // ドラッグ中であることをCSSに伝えます。
+        button.classList.add("is-dragging");
+
+      }
+
+
+
+      /*
+        ============================================================
+        ドラッグ中の処理
+        ============================================================
+
+        ポインターが移動するたびに呼び出します。
+
+        指やマウスの位置から、
+        配置先のマス目を計算します。
+
+        配置可能な場所なら移動を確定し、
+        配置できない場所なら現在位置を維持します。
+      */
+      function moveLayoutDrag(event) {
+
+        // ドラッグ中でなければ何もしません。
+        if (!layoutDrag) return;
+
+
+        // 別の指・マウスによる操作は無視します。
+        if (event.pointerId !== layoutDrag.pointerId) return;
+
+
+        // ブラウザのスクロールなどを抑制します。
+        event.preventDefault();
+
+
+        // 編集領域全体の位置と大きさを取得します。
+        const areaRect =
+          layoutEditorArea.getBoundingClientRect();
+
+
+        /*
+          ----------------------------------------------------------
+          ① 1マスの大きさを計算
+          ----------------------------------------------------------
+
+          全体は横8マス×縦6マスです。
+
+          領域の幅を8で割れば、横方向の1マスの大きさになります。
+
+          領域の高さを6で割れば、縦方向の1マスの大きさになります。
+
+          aspect-ratioによって全体を8:6にしているため、
+          原則として縦横のマスの大きさは等しくなります。
+        */
+        const cellWidth = areaRect.width / 8;
+        const cellHeight = areaRect.height / 6;
+
+
+        // 表示サイズが取得できなかった場合は終了します。
+        if (cellWidth <= 0 || cellHeight <= 0) return;
+
+
+        /*
+          ----------------------------------------------------------
+          ② 指・マウスの位置から配置候補を計算
+          ----------------------------------------------------------
+
+          areaRect.left・top
+            → 編集領域の左上位置
+
+          offsetX・offsetY
+            → ボタン内で押した位置
+
+          これらを利用して、
+          ボタンの左上がどのマスに来るかを計算します。
+
+          Math.floor()
+            → 小数点以下を切り捨てます。
+
+          これによって、ボタンがマス目に吸着するようになります。
+        */
+        const col = Math.floor(
+          (
+            event.clientX -
+            areaRect.left -
+            layoutDrag.offsetX
+          ) / cellWidth
+        ) + 1;
+
+
+        const row = Math.floor(
+          (
+            event.clientY -
+            areaRect.top -
+            layoutDrag.offsetY
+          ) / cellHeight
+        ) + 1;
+
+
+        /*
+          ----------------------------------------------------------
+          ③ 配置可能か確認
+          ----------------------------------------------------------
+
+          L字型の範囲内で、他のボタンと重ならない場合だけ
+          実際に配置を更新します。
+
+          無効な場所へ移動した場合は、
+          最後に配置できた場所にボタンが残ります。
+        */
+        if (
+          isValidLayoutPosition(
+            layoutDrag.button,
+            col,
+            row
+          )
+        ) {
+
+          setLayoutButtonPosition(
+            layoutDrag.button,
+            col,
+            row
+          );
+
+        }
+
+      }
+
+
+
+      /*
+        ============================================================
+        ドラッグ終了
+        ============================================================
+
+        ボタンを離したときに呼び出します。
+
+        ドラッグ中の見た目を解除し、
+        現在の配置を確定します。
+
+        今回はまだブラウザを再読み込みすると
+        初期配置に戻ります。
+
+        配置の保存機能は、別途追加します。
+      */
+      function endLayoutDrag(event) {
+
+        // ドラッグ中でなければ何もしません。
+        if (!layoutDrag) return;
+
+
+        // 別の指・マウスによる操作は無視します。
+        if (event.pointerId !== layoutDrag.pointerId) return;
+
+
+        // ドラッグしていたボタンを取得します。
+        const button = layoutDrag.button;
+
+
+        // ドラッグ中の見た目を解除します。
+        button.classList.remove("is-dragging");
+
+
+        // ポインターキャプチャを解除します。
+        try {
+
+          if (
+            button.hasPointerCapture(event.pointerId)
+          ) {
+
+            button.releasePointerCapture(event.pointerId);
+
+          }
+
+        } catch (error) {
+
+          // 解除に失敗してもドラッグ終了処理は継続します。
+
+        }
+
+
+        // ドラッグ状態を終了します。
+        layoutDrag = null;
+
+      }
+
+
+
+      /*
+        ============================================================
+        ドラッグイベントの登録
+        ============================================================
+
+        各操作ボタンにドラッグ開始イベントを登録します。
+
+        pointerdown
+          → ボタンを押した
+
+        pointermove
+          → 指・マウスが移動した
+
+        pointerup
+          → ボタンを離した
+
+        pointercancel
+          → 操作が中断された
+
+        pointermove・pointerupなどはdocument側で受け取ります。
+
+        これによって、ドラッグ中にボタンの位置が変わっても
+        操作を継続できます。
+      */
+      const layoutPreviewButtons =
+        layoutEditorArea.querySelectorAll(".layout-preview-btn");
+
+
+      // すべての配置編集用ボタンに、ドラッグ開始処理を登録します。
+      layoutPreviewButtons.forEach(button => {
+
+        button.addEventListener(
+          "pointerdown",
+          startLayoutDrag
+        );
+
+      });
+
+      /*
+        ============================================================
+        配置保存ボタンのイベント登録
+        ============================================================
+
+        「配置を保存」ボタンが押されたら、
+        saveLayout()を実行します。
+      */
+      document.getElementById("layout-save-btn")
+        .addEventListener(
+          "click",
+          saveLayout
+        );
+
+
+      // 指・マウスが移動したとき
+      document.addEventListener(
+        "pointermove",
+        moveLayoutDrag
+      );
+
+
+      // 指・マウスを離したとき
+      document.addEventListener(
+        "pointerup",
+        endLayoutDrag
+      );
+
+
+      // OSやブラウザによって操作が中断されたとき
+      document.addEventListener(
+        "pointercancel",
+        endLayoutDrag
+      );
+
+
+      /*
+        ブラウザが非表示になった場合も、
+        ドラッグ状態を解除します。
+
+        例えばスマートフォンで別のアプリへ切り替えた場合などです。
+      */
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+
+          if (document.hidden && layoutDrag) {
+
+            layoutDrag.button.classList.remove("is-dragging");
+
+            layoutDrag = null;
+
+          }
+
+        }
+      );
 
 
       /*
@@ -3118,8 +6532,8 @@
           // 一時停止画面を表示します。
           showOverlay(
             "一時停止中",
-            "ひと休み。準備ができたら再開しよう。",
-            "再開する"
+            "",
+            "再開"
           );
 
         } else {
@@ -3538,15 +6952,21 @@
       */
       function runControlAction(action) {
 
-        /*
-          設定ボタンと予備ボタンは、
-          現時点では何も機能を割り当てていません。
-        */
-        if (
-          action === "settings" ||
-          action === "spare"
-        ) {
+        
+        // 設定ボタンが押された場合は設定画面を開きます。
+        if (action === "settings") {
+
+          openSettings();
+
           return;
+
+        }
+
+        // 予備ボタンは、現在は何も実行しません。
+        if (action === "spare") {
+
+          return;
+
         }
 
 
@@ -4063,7 +7483,51 @@
           togglePause
         );
 
+      /*
+        設定画面の「戻る」ボタンにイベントを登録します。
 
+        クリックされたらcloseSettings()を実行し、
+        設定画面を閉じてゲーム画面に戻ります。
+      */
+      document.getElementById("settings-close-btn")
+        .addEventListener(
+          "click",
+          closeSettings
+        );
+
+      /*
+        ============================================================
+        ボタン配置設定への移動
+        ============================================================
+
+        設定画面にある「ボタン配置を変更」ボタンを押すと、
+        ボタン配置モードへ移動します。
+
+        HTML側のsettings-layout-btnと、
+        JavaScript側のopenLayoutEditor()を連携させています。
+      */
+      document.getElementById("settings-layout-btn")
+        .addEventListener(
+          "click",
+          openLayoutEditor
+        );
+
+
+      /*
+        ============================================================
+        ボタン配置モードから設定画面へ戻る
+        ============================================================
+
+        ボタン配置画面にある「設定に戻る」を押すと、
+        設定画面に戻ります。
+
+        ゲームの一時停止状態は維持されます。
+      */
+      document.getElementById("layout-close-btn")
+        .addEventListener(
+          "click",
+          closeLayoutEditor
+        );
 
       /*
         やり直すボタン
@@ -4295,6 +7759,11 @@
       // 最初のお題を作ります。
       createPuzzle();
 
+      // 前回保存したボタン配置を読み込みます。
+      loadLayout();
+
+      // 読み込んだ配置を実際のゲーム画面に反映します。
+      applyLayoutToGame();
 
       // 最初に操作するブロックを作ります。
       piece = makePiece(randomType());
