@@ -865,13 +865,25 @@
       currentColor
         → ボタンの文字色と同じ色を使用します。
     */
-    .touch-btn svg {
-      width: 30px;
-      height: 30px;
+    /*
+      ============================================================
+      回転アイコンの共通設定
+      ============================================================
+
+      ゲーム画面と配置設定画面で、
+      同じ大きさ・線の太さで表示します。
+
+      width・height
+        → アイコンの大きさを24pxに統一します。
+    */
+    .touch-btn svg,
+    .layout-preview-btn svg {
+      width: 24px;
+      height: 24px;
 
       fill: none;
-      stroke: currentColor;
 
+      stroke: currentColor;
       stroke-width: 3.2;
 
       stroke-linecap: round;
@@ -2943,7 +2955,10 @@
             style="grid-column:1 / span 2; grid-row:5 / span 1;"
             aria-label="左回転">
 
-            ↶
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 3v6h6" />
+              <path d="M3.05 13A9 9 0 1 0 5.64 5.64L3 9" />
+            </svg>
 
           </button>
 
@@ -2976,7 +2991,10 @@
             style="grid-column:5 / span 2; grid-row:5 / span 1;"
             aria-label="右回転">
 
-            ↷
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 3v6h-6" />
+              <path d="M20.95 13A9 9 0 1 1 18.36 5.64L21 9" />
+            </svg>
 
           </button>
 
