@@ -874,12 +874,12 @@
       同じ大きさ・線の太さで表示します。
 
       width・height
-        → アイコンの大きさを24pxに統一します。
+        → アイコンの大きさを20pxに統一します。
     */
     .touch-btn svg,
     .layout-preview-btn svg {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
 
       fill: none;
 
@@ -2002,23 +2002,65 @@
       スマートフォン向け表示
       ============================================================
 
-      横幅が狭い場合は、
-      配置エリアと仮置き場を上下に並べます。
+      配置エリアと仮置き場を左右に並べます。
+
+      また、画面の上側が見切れないように、
+      配置設定画面を上端から表示します。
     */
     @media (max-width: 760px) {
 
       .settings-card.layout-card {
         width: min(500px, 100%);
+        padding: 12px;
       }
 
-      .layout-workspace {
-        grid-template-columns: 1fr;
+      /*
+        画面の高さが足りない場合でも、
+        上から順番に表示してスクロールできるようにします。
+      */
+      #layout-screen {
+        align-items: flex-start;
+        padding: 12px;
+      }
 
-        gap: 28px;
+      /*
+        配置エリアと仮置き場を左右に配置します。
+      */
+      .layout-workspace {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
       }
 
       .layout-workspace-panel {
         width: 100%;
+      }
+
+      .layout-workspace-title {
+        font-size: 15px;
+      }
+
+      .layout-zone-legend {
+        gap: 4px;
+      }
+
+      .layout-zone-label {
+        padding: 4px 5px;
+        font-size: 10px;
+      }
+
+      .layout-area-note {
+        font-size: 10px;
+      }
+
+      .layout-staging-description {
+        font-size: 10px;
+      }
+
+      .layout-editor-area,
+      .layout-staging-area {
+        margin: 10px auto;
       }
 
     }
