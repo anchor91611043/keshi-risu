@@ -2065,7 +2065,141 @@
 
     }
 
+    /*
+      ============================================================
+      現在の編集モードの表示
+      ============================================================
+    */
+    .layout-mode-status {
+      margin: 0 0 12px;
 
+      text-align: center;
+
+      color: #cbd5e1;
+
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /*
+      ============================================================
+      ボタンの大きさ変更パネル
+      ============================================================
+    */
+    .layout-size-controls {
+      width: 100%;
+
+      margin-top: 14px;
+      padding: 12px;
+
+      background: #202d49;
+
+      border: 1px solid #405476;
+      border-radius: 10px;
+    }
+
+
+    /* hidden属性が付いている間は非表示にします。 */
+    .layout-size-controls[hidden] {
+      display: none !important;
+    }
+
+
+    /*
+      ============================================================
+      選択中のボタン名
+      ============================================================
+    */
+    .layout-size-target {
+      margin: 0 0 14px;
+
+      text-align: center;
+
+      font-size: 14px;
+      font-weight: 700;
+
+      color: #edf2ff;
+    }
+
+
+    /*
+      ============================================================
+      横幅・縦幅の設定行
+      ============================================================
+    */
+    .layout-size-row {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 8px;
+
+      margin-top: 10px;
+    }
+
+
+    .layout-size-label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+
+    /*
+      ============================================================
+      サイズ表示と＋－ボタン
+      ============================================================
+    */
+    .layout-size-value-group {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      font-size: 13px;
+    }
+
+
+    .layout-size-value {
+      min-width: 20px;
+
+      text-align: center;
+
+      font-size: 17px;
+      font-weight: 700;
+
+      font-variant-numeric: tabular-nums;
+    }
+
+
+    .layout-size-adjust-btn {
+      width: 40px;
+      min-height: 40px;
+
+      border: 1px solid #596f92;
+      border-radius: 7px;
+
+      background: #344968;
+      color: #ffffff;
+
+      font-size: 20px;
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+
+    .layout-size-adjust-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+
+    .layout-size-adjust-btn:not(:disabled):hover {
+      background: #465f8b;
+    }    
 
   </style>
 </head>
@@ -2814,6 +2948,16 @@
           操作ボタンの位置や大きさを調整できます。
         </p>
 
+        <!-- 現在の編集モードを表示 -->
+        <p
+          id="layout-mode-status"
+          class="layout-mode-status"
+          aria-live="polite">
+
+          現在のモード：配置モード
+
+        </p>
+
         <!-- 配置エリアと仮置き場を横に並べる領域 -->
         <div class="layout-workspace">
 
@@ -3143,6 +3287,127 @@
               ボタンを一時的に置くための場所です。
             </p>
 
+
+            <!--
+              ========================================================
+              ボタンの大きさ変更パネル
+              ========================================================
+
+              大きさ変更モードでボタンを選択したときに表示します。
+
+              横幅・縦幅をそれぞれ変更できるようにします。
+
+              現段階ではHTMLの土台だけです。
+              JavaScriptは次の作業で接続します。
+            -->
+            <div
+              id="layout-size-controls"
+              class="layout-size-controls"
+              hidden>
+
+              <!-- 現在選択しているボタン -->
+              <p
+                id="layout-size-target"
+                class="layout-size-target">
+
+                選択中：なし
+
+              </p>
+
+
+              <!-- 横幅の変更 -->
+              <div class="layout-size-row">
+
+                <span class="layout-size-label">
+                  横幅
+                </span>
+
+                <div class="layout-size-value-group">
+
+                  <button
+                    type="button"
+                    class="layout-size-adjust-btn"
+                    data-size-axis="width"
+                    data-size-delta="-1"
+                    disabled>
+
+                    −
+
+                  </button>
+
+                  <output
+                    id="layout-size-width-value"
+                    class="layout-size-value">
+
+                    --
+
+                  </output>
+
+                  <span>マス</span>
+
+                  <button
+                    type="button"
+                    class="layout-size-adjust-btn"
+                    data-size-axis="width"
+                    data-size-delta="1"
+                    disabled>
+
+                    ＋
+
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <!-- 縦幅の変更 -->
+              <div class="layout-size-row">
+
+                <span class="layout-size-label">
+                  縦幅
+                </span>
+
+                <div class="layout-size-value-group">
+
+                  <button
+                    type="button"
+                    class="layout-size-adjust-btn"
+                    data-size-axis="height"
+                    data-size-delta="-1"
+                    disabled>
+
+                    −
+
+                  </button>
+
+                  <output
+                    id="layout-size-height-value"
+                    class="layout-size-value">
+
+                    --
+
+                  </output>
+
+                  <span>マス</span>
+
+                  <button
+                    type="button"
+                    class="layout-size-adjust-btn"
+                    data-size-axis="height"
+                    data-size-delta="1"
+                    disabled>
+
+                    ＋
+
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
           </section>
 
         </div>
@@ -3186,14 +3451,14 @@
           aria-live="polite">
         </p>
 
-        <!-- 大きさ変更モードへの切り替え -->
+        <!-- 配置モードと大きさ変更モードの切り替え -->
         <button
           type="button"
           id="layout-size-mode-btn"
           class="settings-btn"
-          disabled>
+          aria-pressed="false">
 
-          ボタンの大きさを変更（準備中）
+          大きさ変更モードへ
 
         </button>
 
@@ -4938,6 +5203,9 @@
         // ボタン配置画面を表示します。
         layoutScreen.hidden = false;
 
+        // 編集画面を開いたときは配置モードから開始します。
+        setLayoutEditMode("position");
+
       }
 
 
@@ -4989,6 +5257,155 @@
       */
       let layoutDrag = null;
 
+      /*
+        ============================================================
+        現在のボタン編集モード
+        ============================================================
+
+        "position"
+          → ボタンの配置を変更するモード
+
+        "size"
+          → ボタンの大きさを変更するモード
+
+        最初は必ず配置モードから開始します。
+      */
+      let layoutEditMode = "position";
+
+      /*
+        ============================================================
+        ボタン編集モードを変更する
+        ============================================================
+
+        mode
+          → "position" または "size"
+
+        この関数では次の処理を行います。
+
+          ① ドラッグ中の場合は終了させる
+          ② 編集モードを変更する
+          ③ 切り替えボタンの文字を変更する
+          ④ 現在のモード表示を更新する
+      */
+      function setLayoutEditMode(mode) {
+
+        // 想定していないモードが指定された場合は終了します。
+        if (
+          mode !== "position" &&
+          mode !== "size"
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+          ----------------------------------------------------------
+          ① ドラッグ中の場合は終了
+          ----------------------------------------------------------
+
+          モードを切り替えたときに、
+          以前のドラッグ操作が残らないようにします。
+        */
+        if (layoutDrag) {
+
+          const button = layoutDrag.button;
+
+          const pointerId = layoutDrag.pointerId;
+
+
+          // ドラッグ中の見た目を解除します。
+          button.classList.remove("is-dragging");
+
+
+          // ポインターキャプチャを解除します。
+          try {
+
+            if (button.hasPointerCapture(pointerId)) {
+
+              button.releasePointerCapture(pointerId);
+
+            }
+
+          } catch (error) {
+
+            // 解除に失敗しても処理を続けます。
+
+          }
+
+
+          // ドラッグ状態を終了します。
+          layoutDrag = null;
+
+        }
+
+
+        /*
+          ----------------------------------------------------------
+          ② 編集モードを変更
+          ----------------------------------------------------------
+        */
+        layoutEditMode = mode;
+
+
+        /*
+          ----------------------------------------------------------
+          ③ 切り替えボタンの表示を変更
+          ----------------------------------------------------------
+
+          配置モード中：
+            大きさ変更モードへ
+
+          大きさ変更モード中：
+            配置モードに戻る
+        */
+        const sizeModeButton =
+          document.getElementById("layout-size-mode-btn");
+
+
+        if (mode === "position") {
+
+          sizeModeButton.textContent =
+            "大きさ変更モードへ";
+
+        } else {
+
+          sizeModeButton.textContent =
+            "配置モードに戻る";
+
+        }
+
+
+        // 現在のモードをアクセシビリティ情報にも反映します。
+        sizeModeButton.setAttribute(
+          "aria-pressed",
+          String(mode === "size")
+        );
+
+
+        /*
+          ----------------------------------------------------------
+          ④ 現在のモード表示を変更
+          ----------------------------------------------------------
+        */
+        const modeStatus =
+          document.getElementById("layout-mode-status");
+
+
+        if (mode === "position") {
+
+          modeStatus.textContent =
+            "現在のモード：配置モード";
+
+        } else {
+
+          modeStatus.textContent =
+            "現在のモード：大きさ変更モード";
+
+        }
+
+      }
 
       /*
         ============================================================
@@ -6097,6 +6514,9 @@
       */
       function startLayoutDrag(event) {
 
+        // 大きさ変更モード中は通常のドラッグを禁止します。
+        if (layoutEditMode !== "position") return;
+
         // ボタン配置画面が閉じている場合は何もしません。
         if (layoutScreen.hidden) return;
 
@@ -6404,6 +6824,32 @@
           saveLayout
         );
 
+      /*
+        ============================================================
+        大きさ変更モード切り替えボタン
+        ============================================================
+
+        ボタンを押すたびに、2つのモードを切り替えます。
+      */
+      document.getElementById("layout-size-mode-btn")
+        .addEventListener(
+          "click",
+          () => {
+
+            if (layoutEditMode === "position") {
+
+              // 配置モードから大きさ変更モードへ
+              setLayoutEditMode("size");
+
+            } else {
+
+              // 大きさ変更モードから配置モードへ
+              setLayoutEditMode("position");
+
+            }
+
+          }
+        );
 
       // 指・マウスが移動したとき
       document.addEventListener(
